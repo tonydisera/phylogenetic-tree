@@ -1,3 +1,19 @@
+body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0;padding: 10px; }
+
+.phylo-tree svg {
+    position: fixed;
+    top: 80px;
+    left: 0px;
+    width: 900px;
+}
+#footer {
+  position: fixed;
+  bottom: 5px;
+  left: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #717171;
+}
 * {
   font-family: 'Raleway';
 }
@@ -31,9 +47,9 @@ g.nodes text {
 }
 
 g.nodes text.emphasize-node {
-  font-size: 18px;
-  font-weight: 600;
-  fill: #fa4141;
+    font-size: 18px;
+    font-weight: 700;
+    fill: #444d99;
 }
 
 g.nodes text.emphasize-node.label--active {
@@ -42,21 +58,51 @@ g.nodes text.emphasize-node.label--active {
   fill: black;
 }
 
+g.nodes .similarity rect {
+  transform: rotate(-90deg);
+  stroke: #000000b8;
+}
+text.legend-title  {
+  fill: black;
+  text-anchor: start;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 
 
 h2 {
   margin-bottom: 0px;
-  margin-left: 20px;
+  margin-left: 0px;
   margin-top: 0px;
 }
 
+#branch-hint {
+  width: 300px;
+  margin-left: 45px;
+  font-size: 12px;
+  border: solid #bab9b9 1px;
+  padding: 5px;
+  margin-top: 5px;
+  font-style: italic;
+  color: #454545;
+}
+
 #toggle-button-container {
-  margin-left: 50px;
-  display: flex;
-  margin-top: 3px;
+  margin-left: 45px;
   display: flex;
 }
+#toggle-button {
+  padding-top: 4px;
+}
 #toggle-button-label {
-  margin-right: 10px;
-  padding-top: 2px;
+  padding-top: 6px;
+  font-size: 15px;
+  padding-right: 8px;
+}
+#legend-label {
+  font-size: 14px;
+  width: 130px;
+  display: inline-block;
+  margin-left: 72px;
 }

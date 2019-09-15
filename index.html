@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="assets/toggle_button.css">
 
 <script src="http://d3js.org/d3.v5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
 
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -15,14 +16,28 @@
 </head>
 <body>
     <div style="display:flex">
-      <h2>100 Vertebrates</h2>
-      <div id="toggle-button-container">
-        <span id="toggle-button-label" >Branch Length</span>
-        <div id="toggle-button"></div>
+      <h2>Phylogenetic Tree for 100 Vertebrate Species</h2>
+
+      <div>
+        <div id="toggle-button-container">
+          <span id="toggle-button-label" >Branch Length</span>
+          <div id="toggle-button"></div>
+        </div>
+        <div id="branch-hint">
+             Branch length indicates estimated genetic change. The longer the branch, the more
+             divergence that has occurred.  The estimated divergence was calculated
+             from comparing sequence of different species.
+        </div>
       </div>
     </div>
 
     <div class="phylo-tree" style="width:700px;height:700px">
+    </div>
+    <div id="footer">
+      Data source:  UCSC Browser <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/">
+      Human Genome Multi-alignments to 100 different Species
+      </a>.
+
     </div>
 
     <script src="js/newick.js"></script>

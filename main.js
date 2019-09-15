@@ -1,9 +1,19 @@
 
 let width = 700
-let outerRadius = 350
-let innerRadius = 200
+let outerRadius = 300
+let innerRadius = 170
+let marginTop = 20
 let link = null
 let linkExtension = null
+let node = null
+let phyloFileName      = "data/hg19.100way.commonNames.nh";
+let similarityFileName = "data/species_multialign_info.csv";
+let speciesSimilarity = {}
+let barHeight = 30
+let barWidth = 7
+var colorScale = d3.scaleSequential()
+                   .domain([0,1])
+                   .interpolator(d3.interpolateYlGnBu)
 
 $(document).ready(function() {
 
@@ -33,17 +43,35 @@ $(document).ready(function() {
 function promiseParseTreeData() {
   return new Promise(function(resolve, reject) {
     let treeObject = null;
-    $.get('data/hg19.100way.commonNames.nh', function(data) {
+    $.get(phyloFileName, function(data) {
 
       treeObject = Newick.parse(data)
 
+      d3.csv(similarityFileName)
+      .then(function(similarityData) {
 
-      resolve(treeObject);
+        parseSimilarityData(similarityData);
+
+        resolve(treeObject);
+
+      })
+      .catch(function(error) {
+        alert("Unable to load file " + similarityFileName + ".")
+      })
+
+
 
     }, 'text');
 
   })
 
+}
+
+function parseSimilarityData(similarityData) {
+  similarityData.forEach(function(rec) {
+    let speciesName = rec.species.replace(/ /g, "_")
+    speciesSimilarity[speciesName] = +rec.ratio_same_as_human;
+  })
 }
 
 
@@ -69,16 +97,19 @@ function drawTree(treeObject) {
 
   let container = d3.select(".phylo-tree");
 
+
   let svg = container.append("svg")
              .attr("width", width)
              .attr("height", width)
-             .style("width", "100%")
-             .style("height", "auto")
              .style("font", "10px sans-serif")
              .attr("viewBox", [-outerRadius, -outerRadius, width, width]);
 
+  drawLegend(svg);
 
-  linkExtension = svg.append("g")
+  let group = svg.append("g")
+                 .attr("transform", "translate(0," + marginTop + ")");
+
+  linkExtension = group.append("g")
       .attr("class", "link-extensions")
       .selectAll("path")
       .data(root.links().filter(d => !d.target.children))
@@ -86,7 +117,7 @@ function drawTree(treeObject) {
       .each(function(d) { d.target.linkExtensionNode = this; })
       .attr("d", linkExtensionConstant);
 
-  link = svg.append("g")
+  link = group.append("g")
       .attr("class", "links")
       .selectAll("path")
       .data(root.links())
@@ -95,9 +126,42 @@ function drawTree(treeObject) {
       .attr("d", linkConstant)
 
 
-  svg.append("g")
+  node = group.append("g")
       .attr("class", "nodes")
-      .selectAll("text")
+
+
+  let similarity = node.selectAll("g.similarity")
+      .data(root.leaves())
+      .join("g")
+      .attr("class", "similarity")
+      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
+
+  similarity.append("rect")
+            .attr("width", barWidth)
+            .attr("height", d => {
+              let ratio = speciesSimilarity[d.data.name];
+              if (ratio) {
+                return Math.max(barWidth, ratio * (barHeight-2));
+              } else {
+                return 0;
+              }
+            })
+            .attr("x", -2)
+            .attr("y", d => {
+              let ratio = speciesSimilarity[d.data.name];
+              if (d.x >= 180) {
+                return Math.min(-barWidth, ((-barHeight+2) * ratio));
+              } else {
+                return 0;
+              }
+            })
+            .attr("fill", d => {
+              let ratio = speciesSimilarity[d.data.name];
+              return colorScale(ratio);
+            })
+
+
+  node.selectAll("text")
       .data(root.leaves())
       .join("text")
       .attr("class", function(d,i) {
@@ -108,7 +172,7 @@ function drawTree(treeObject) {
         }
       })
       .attr("dy", ".31em")
-      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
+      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + barHeight + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
       .attr("text-anchor", d => d.x < 180 ? "start" : "end")
       .text(d => {
         //let name = Object.keys(d.data).join(" ")
@@ -125,6 +189,55 @@ function update(checked) {
   const t = d3.transition().duration(750);
   linkExtension.transition(t).attr("d", checked ? linkExtensionVariable : linkExtensionConstant);
   link.transition(t).attr("d", checked ? linkVariable : linkConstant);
+}
+
+function drawLegend(svg) {
+
+  legendWidth = 200;
+
+  // Background canvas for quick drawing of 2k lines
+  var canvas = d3.select('body').append("canvas")
+      .attr("width", legendWidth)
+      .attr("height", 20)
+      .style("position", "fixed")
+      .style("left", "20px")
+      .style("top", "100px")
+
+  var ctx = canvas.node().getContext("2d");
+
+  var xScale  = d3.scaleLinear().domain([0, 100]).range([0, legendWidth]);
+
+  var axis = svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(-380, " + (-(width/2)+90) + ")");
+
+  axis.call(d3.axisBottom(xScale));
+  axis.append("text")
+      .attr("class", "legend-title")
+      .attr("x", 10)
+      .attr("y", -27)
+      .text("% Sequence Shared with Human");
+
+  var legendColorScale = d3.scaleSequential()
+                   .domain([0,100])
+                   .interpolator(d3.interpolateYlGnBu)
+
+  var linear = d3.scaleLinear()
+                .domain([0,100])
+                .range([legendColorScale(0),legendColorScale(1)]);
+
+
+
+  // Let's draw 1000 lines on canvas for speed
+  d3.range(0, 100, .001)
+    .forEach(function (d) {
+      ctx.beginPath();
+      ctx.strokeStyle = colorScale(d/100);
+      ctx.moveTo(xScale(d), 0);
+      ctx.lineTo(xScale(d), 20);
+      ctx.stroke();
+    });
+
 }
 
 // Set the radius of each node by recursively summing and scaling the distance from the root.
@@ -157,7 +270,7 @@ function linkStep(startAngle, startRadius, endAngle, endRadius) {
       + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * c1 + "," + startRadius * s1)
       + "L" + endRadius * c1 + "," + endRadius * s1;
 }
- function mouseovered(active) {
+function mouseovered(active) {
     return function(d) {
       d3.select(this).classed("label--active", active);
       d3.select(d.linkExtensionNode).classed("link-extension--active", active).raise();
