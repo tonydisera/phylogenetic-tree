@@ -1,0 +1,62 @@
+* {
+  font-family: 'Raleway';
+}
+.link--active {
+  stroke: black !important;
+  stroke-width: 1.5px;
+}
+
+.link-extension--active {
+  stroke-width: 1.5px;
+}
+
+.label--active {
+  font-weight: bold;
+}
+
+g.links {
+  stroke: #8c8c8c;
+  fill: none;
+}
+
+g.link-extensions {
+  stroke: #6399cf;
+  stroke-width: 1.5px;
+}
+
+g.nodes text {
+  color: #717171;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+g.nodes text.emphasize-node {
+  font-size: 18px;
+  font-weight: 600;
+  fill: #fa4141;
+}
+
+g.nodes text.emphasize-node.label--active {
+  font-size: 18px;
+  font-weight: 800;
+  fill: black;
+}
+
+
+
+h2 {
+  margin-bottom: 0px;
+  margin-left: 20px;
+  margin-top: 0px;
+}
+
+#toggle-button-container {
+  margin-left: 50px;
+  display: flex;
+  margin-top: 3px;
+  display: flex;
+}
+#toggle-button-label {
+  margin-right: 10px;
+  padding-top: 2px;
+}

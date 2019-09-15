@@ -1,0 +1,32 @@
+<html>
+<head>
+
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/toggle_button.css">
+
+<script src="http://d3js.org/d3.v5.js"></script>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+    <div style="display:flex">
+      <h2>100 Vertebrates</h2>
+      <div id="toggle-button-container">
+        <span id="toggle-button-label" >Branch Length</span>
+        <div id="toggle-button"></div>
+      </div>
+    </div>
+
+    <div class="phylo-tree" style="width:700px;height:700px">
+    </div>
+
+    <script src="js/newick.js"></script>
+    <script src="js/buttonstrip.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
