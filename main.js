@@ -16,18 +16,21 @@ percent of sequene the species shares with the Human
 genome.
 */
 let tooltip = null;
-let width = 620
+let width = 640
 let outerRadius = 300
 let innerRadius = 170
 let marginTop = 20
+let marginLeft = -90
 let link = null
 let linkExtension = null
 let node = null
 let phyloFileName      = "data/hg19.100way.commonNames.nh";
 let similarityFileName = "data/species_multialign_info.csv";
 let speciesSimilarity = {}
-let barHeight = 30
-let barWidth = 7
+let barHeight = 18
+let barWidth = 5
+let barPadding = 3
+let barHeightIsRatio = false;
 var colorScale = d3.scaleSequential()
                    .domain([0,1])
                    .interpolator(d3.interpolateYlGnBu)
@@ -128,7 +131,7 @@ tooltip = d3.select("body").append("div")
   drawLegend(svg);
 
   let group = svg.append("g")
-                 .attr("transform", "translate(0," + marginTop + ")");
+                 .attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
 
   linkExtension = group.append("g")
       .attr("class", "link-extensions")
@@ -160,20 +163,32 @@ tooltip = d3.select("body").append("div")
   similarity.append("rect")
             .attr("width", barWidth)
             .attr("height", d => {
-              let ratio = speciesSimilarity[d.data.name];
-              if (ratio) {
-                return Math.max(barWidth, ratio * (barHeight-2));
+              if (barHeightIsRatio) {
+                let ratio = speciesSimilarity[d.data.name];
+                if (ratio) {
+                  return Math.max(barWidth, ratio * (barHeight-barPadding));
+                } else {
+                  return 0;
+                }
               } else {
-                return 0;
+                return barHeight - barPadding;
               }
             })
-            .attr("x", -2)
+            .attr("x", -barPadding)
             .attr("y", d => {
-              let ratio = speciesSimilarity[d.data.name];
-              if (d.x >= 180) {
-                return Math.min(-barWidth, ((-barHeight+2) * ratio));
+              if (barHeightIsRatio) {
+                let ratio = speciesSimilarity[d.data.name];
+                if (d.x >= 180) {
+                  return Math.min(-barWidth, ((-barHeight+barPadding) * ratio));
+                } else {
+                  return 0;
+                }
               } else {
-                return 0;
+                if (d.x >= 180) {
+                  return -barHeight+barPadding;
+                } else {
+                  return 0;
+                }
               }
             })
             .attr("fill", d => {
@@ -195,7 +210,7 @@ tooltip = d3.select("body").append("div")
         }
       })
       .attr("dy", ".31em")
-      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + barHeight + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
+      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + barHeight + barPadding + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
       .attr("text-anchor", d => d.x < 180 ? "start" : "end")
       .text(d => {
         return d.data.name.replace(/_/g, " ")
@@ -218,20 +233,22 @@ function drawLegend(svg) {
   legendWidth = 130;
 
   // Background canvas for quick drawing of 2k lines
+  /*
   var canvas = d3.select('body').append("canvas")
       .attr("width", legendWidth)
       .attr("height", 20)
       .style("position", "fixed")
-      .style("left", "760px")
+      .style("left", "690px")
       .style("top", "230px")
 
   var ctx = canvas.node().getContext("2d");
+  */
 
   var xScale  = d3.scaleLinear().domain([0, 100]).range([0, legendWidth]);
 
   var axis = svg.append("g")
     .attr("class", "axis")
-    .attr("transform", "translate(320, " + (-(width/2)+180) + ")");
+    .attr("transform", "translate(210, " + (-(width/2)+180) + ")");
 
   axis.call(d3.axisBottom(xScale).ticks(5));
   axis.append("text")
@@ -245,6 +262,14 @@ function drawLegend(svg) {
       .attr("y", -25)
       .text("Shared with Human");
 
+  axis.append("image")
+      .attr("xlink:href", "assets/YlGrBuGradient.png")
+      .attr("x", 0)
+      .attr("y", -20)
+      .attr("width", legendWidth)
+      .attr("height", 20);
+
+/*
   var legendColorScale = d3.scaleSequential()
                    .domain([0,100])
                    .interpolator(d3.interpolateYlGnBu)
@@ -264,6 +289,7 @@ function drawLegend(svg) {
       ctx.lineTo(xScale(d), 20);
       ctx.stroke();
     });
+  */
 
 }
 

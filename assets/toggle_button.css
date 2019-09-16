@@ -19,7 +19,7 @@
 
 
 .strip-button-text {
-    color: #929292;
+    color: #636363;
     width: 50%;
     height: 100%;
     text-align: center;
@@ -28,10 +28,11 @@
     transition: background-color .4s linear, color .2s linear;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
 }
 
 .active-strip-button {
-    background-color: #6399cf;
+    background-color: #387cc0;
     color: white;
 }
 

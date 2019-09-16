@@ -15,35 +15,53 @@
 
 </head>
 <body>
-    <div style="display:flex">
-      <div>
-        <h2>Phylogenetic Tree for 100 Vertebrate Species</h2>
-        <div id="data-source" >
-          Data source:  UCSC Browser <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">
-          Human Genome Multi-alignments to 100 different Species
-          </a>
-        </div>
-
+<div style="display:flex; justify-content: center">
+  <div id="body-contents">
+    <div class="topic-heading">
+      <div class="topic-title">
+        <h2>Tree of Life for 100 Vertebrates</h2>
       </div>
 
-      <div>
+      <div style="display:flex">
         <div id="toggle-button-container">
           <span id="toggle-button-label" >Branch Length</span>
           <div id="toggle-button"></div>
         </div>
-        <div id="branch-hint">
-             Branch length indicates estimated genetic change. The longer the branch, the more
-             divergence that has occurred.  The estimated divergence was calculated
-             from comparing sequence of different species.
+        <div class="chart-hint">
+             Branch length indicates estimated genetic change, calculated by comparing
+             sequence from different species. The longer the branch, the more
+             divergence that has occurred.
         </div>
       </div>
     </div>
 
-    <div class="phylo-tree" style="width:700px;height:700px">
-    </div>
+    <div style="display:flex">
+      <div class="phylo-tree" style="width:700px;height:700px">
+      </div>
+      <div>
+        <div class="chart-hint legend" >
+             The bar between the branch and the species name indicates the percent
+             of sequence shared between the species and Human.  Hover over the
+             bar to see the percentage.
+        </div>
+        <div class="chart-hint credits">
+          Credits
+          </br>
+          &nbsp;&nbsp;&nbsp;&nbsp;Data source:
+          <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">UCSC Browser Human Multi-alignments</a>
+          <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;The D3 phylogenetic tree: <a href="https://observablehq.com/@mbostock/tree-of-life" target="_new">Mike Bostock Tree of Life</a>
+          <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;The gradient legend: <a href="https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244" target="_new">John Guerra Continuous Scales</a>
+        </div>
 
+      </div>
+    </div>
+  </div>
+</div>
     <script src="js/newick.js"></script>
     <script src="js/buttonstrip.min.js"></script>
     <script src="main.js"></script>
+
 </body>
 </html>
