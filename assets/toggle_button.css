@@ -27,6 +27,7 @@
     line-height: 21px;
     transition: background-color .4s linear, color .2s linear;
     cursor: pointer;
+    font-size: 14px;
 }
 
 .active-strip-button {

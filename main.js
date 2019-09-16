@@ -1,5 +1,5 @@
 
-let width = 700
+let width = 620
 let outerRadius = 300
 let innerRadius = 170
 let marginTop = 20
@@ -99,7 +99,7 @@ function drawTree(treeObject) {
 
 
   let svg = container.append("svg")
-             .attr("width", width)
+             .attr("width", width )
              .attr("height", width)
              .style("font", "10px sans-serif")
              .attr("viewBox", [-outerRadius, -outerRadius, width, width]);
@@ -193,15 +193,15 @@ function update(checked) {
 
 function drawLegend(svg) {
 
-  legendWidth = 200;
+  legendWidth = 130;
 
   // Background canvas for quick drawing of 2k lines
   var canvas = d3.select('body').append("canvas")
       .attr("width", legendWidth)
       .attr("height", 20)
       .style("position", "fixed")
-      .style("left", "20px")
-      .style("top", "100px")
+      .style("left", "760px")
+      .style("top", "230px")
 
   var ctx = canvas.node().getContext("2d");
 
@@ -209,14 +209,19 @@ function drawLegend(svg) {
 
   var axis = svg.append("g")
     .attr("class", "axis")
-    .attr("transform", "translate(-380, " + (-(width/2)+90) + ")");
+    .attr("transform", "translate(320, " + (-(width/2)+180) + ")");
 
-  axis.call(d3.axisBottom(xScale));
+  axis.call(d3.axisBottom(xScale).ticks(5));
   axis.append("text")
       .attr("class", "legend-title")
-      .attr("x", 10)
-      .attr("y", -27)
-      .text("% Sequence Shared with Human");
+      .attr("x", 0)
+      .attr("y", -37)
+      .text("Percent Sequence ");
+  axis.append("text")
+      .attr("class", "legend-title")
+      .attr("x", 0)
+      .attr("y", -25)
+      .text("Shared with Human");
 
   var legendColorScale = d3.scaleSequential()
                    .domain([0,100])

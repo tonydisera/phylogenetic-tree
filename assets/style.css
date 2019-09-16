@@ -1,4 +1,9 @@
-body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0;padding: 10px; }
+body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0;padding: 5px; }
+
+* {
+  font-family: 'Raleway';
+  color:  #454545 ;
+}
 
 .phylo-tree svg {
     position: fixed;
@@ -6,17 +11,16 @@ body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0;padding: 10px; }
     left: 0px;
     width: 900px;
 }
-#footer {
-  position: fixed;
-  bottom: 5px;
-  left: 10px;
+#data-source {
   font-size: 13px;
-  font-weight: 600;
-  color: #717171;
+  padding-top: 3px;
+  color:  #454545;
 }
-* {
-  font-family: 'Raleway';
+#data-source a {
+  color: #454545 !important;
+  font-weight: 500 !important;
 }
+
 .link--active {
   stroke: black !important;
   stroke-width: 1.5px;
@@ -41,7 +45,7 @@ g.link-extensions {
 }
 
 g.nodes text {
-  color: #717171;
+  color:  #454545;
   font-size: 12px;
   cursor: pointer;
 }
@@ -63,7 +67,7 @@ g.nodes .similarity rect {
   stroke: #000000b8;
 }
 text.legend-title  {
-  fill: black;
+  fill:  #454545;
   text-anchor: start;
   font-size: 12px;
   font-weight: 600;
@@ -84,7 +88,6 @@ h2 {
   border: solid #bab9b9 1px;
   padding: 5px;
   margin-top: 5px;
-  font-style: italic;
   color: #454545;
 }
 

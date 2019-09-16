@@ -16,7 +16,15 @@
 </head>
 <body>
     <div style="display:flex">
-      <h2>Phylogenetic Tree for 100 Vertebrate Species</h2>
+      <div>
+        <h2>Phylogenetic Tree for 100 Vertebrate Species</h2>
+        <div id="data-source" >
+          Data source:  UCSC Browser <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">
+          Human Genome Multi-alignments to 100 different Species
+          </a>
+        </div>
+
+      </div>
 
       <div>
         <div id="toggle-button-container">
@@ -32,12 +40,6 @@
     </div>
 
     <div class="phylo-tree" style="width:700px;height:700px">
-    </div>
-    <div id="footer">
-      Data source:  UCSC Browser <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/">
-      Human Genome Multi-alignments to 100 different Species
-      </a>.
-
     </div>
 
     <script src="js/newick.js"></script>
