@@ -1,4 +1,21 @@
+/*
 
+Author:  Tony Di Sera tonydisera@berkeley.edu
+
+This viz is for W209.4 Fall 2019.  Much of the D3
+code came from the following sources:
+
+  The phylogenetic tree:
+  https://observablehq.com/@mbostock/tree-of-life
+
+  The gradient legend:
+  https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244
+
+I've added a barchart to the radial tree that shows the
+percent of sequene the species shares with the Human
+genome.
+*/
+let tooltip = null;
 let width = 620
 let outerRadius = 300
 let innerRadius = 170
@@ -77,6 +94,10 @@ function parseSimilarityData(similarityData) {
 
 function drawTree(treeObject) {
 
+// Define the div for the tooltip
+tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
   const root = d3.hierarchy(treeObject, d => d.branchset)
       .sum(d => d.branchset ? 0 : 1)
@@ -159,6 +180,8 @@ function drawTree(treeObject) {
               let ratio = speciesSimilarity[d.data.name];
               return colorScale(ratio);
             })
+            .on("mouseover", mouseOverRatio(true))
+            .on("mouseout", mouseOverRatio(false))
 
 
   node.selectAll("text")
@@ -175,7 +198,6 @@ function drawTree(treeObject) {
       .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + barHeight + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
       .attr("text-anchor", d => d.x < 180 ? "start" : "end")
       .text(d => {
-        //let name = Object.keys(d.data).join(" ")
         return d.data.name.replace(/_/g, " ")
       })
       .on("mouseover", mouseovered(true))
@@ -275,8 +297,31 @@ function linkStep(startAngle, startRadius, endAngle, endRadius) {
       + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * c1 + "," + startRadius * s1)
       + "L" + endRadius * c1 + "," + endRadius * s1;
 }
+function mouseOverRatio(active) {
+  return function(d) {
+    if (active) {
+      let ratio = speciesSimilarity[d.data.name];
+      let pct = Math.round(ratio * 100,0);
+      tooltip.transition()
+          .duration(200)
+          .style("opacity", .9);
+      tooltip .html(d.data.name.replace(/_/g, " ")
+                    + " shares "
+                    + pct + "%  with Human")
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 44) + "px");
+
+    } else {
+      tooltip.transition()
+          .duration(500)
+          .style("opacity", 0);
+
+    }
+  }
+}
 function mouseovered(active) {
     return function(d) {
+
       d3.select(this).classed("label--active", active);
       d3.select(d.linkExtensionNode).classed("link-extension--active", active).raise();
       do d3.select(d.linkNode).classed("link--active", active).raise();
