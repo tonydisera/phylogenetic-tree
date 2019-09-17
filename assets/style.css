@@ -110,7 +110,7 @@ h2 {
 .chart-hint {
   width: 200px;
   font-size: 12px;
-  border: solid #dadada 1px;
+  border: solid #819fad5c 1px;
   padding: 5px;
   margin-top: 10px;
   color: #454545;
@@ -118,8 +118,9 @@ h2 {
 
 
 .chart-hint .emphasize {
-  font-weight: 600;
+  font-weight: 500;
   padding-top: 10px;
+  color: #648ab1;
 }
 
 .chart-hint.legend {
