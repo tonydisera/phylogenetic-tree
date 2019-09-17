@@ -16,11 +16,11 @@ percent of sequene the species shares with the Human
 genome.
 */
 let tooltip = null;
-let width = 640
+let width = 730
 let outerRadius = 300
-let innerRadius = 170
-let marginTop = 20
-let marginLeft = -90
+let innerRadius = 180
+let marginTop = 100
+let marginLeft = -70
 let link = null
 let linkExtension = null
 let node = null
@@ -205,6 +205,12 @@ tooltip = d3.select("body").append("div")
       .attr("class", function(d,i) {
         if (d.data.name == 'Human') {
           return 'emphasize-node';
+        } else if (d.data.name == 'Lamprey') {
+          return 'example-node';
+        } else if (d.data.name == 'Elephant') {
+          return 'example-node';
+        } else if (d.data.name == 'Mouse') {
+          return 'example-node';
         } else {
           return '';
         }
@@ -230,7 +236,7 @@ function update(checked) {
 
 function drawLegend(svg) {
 
-  legendWidth = 130;
+  legendWidth = 80;
 
   // Background canvas for quick drawing of 2k lines
   /*
@@ -248,24 +254,24 @@ function drawLegend(svg) {
 
   var axis = svg.append("g")
     .attr("class", "axis")
-    .attr("transform", "translate(210, " + (-(width/2)+180) + ")");
+    .attr("transform", "translate(-375, " + (-(width/2)+230) + ")");
 
   axis.call(d3.axisBottom(xScale).ticks(5));
   axis.append("text")
       .attr("class", "legend-title")
       .attr("x", 0)
-      .attr("y", -37)
+      .attr("y", -27)
       .text("Percent Sequence ");
   axis.append("text")
       .attr("class", "legend-title")
       .attr("x", 0)
-      .attr("y", -25)
+      .attr("y", -15)
       .text("Shared with Human");
 
   axis.append("image")
       .attr("xlink:href", "assets/YlGrBuGradient.png")
       .attr("x", 0)
-      .attr("y", -20)
+      .attr("y", -16)
       .attr("width", legendWidth)
       .attr("height", 20);
 

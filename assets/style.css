@@ -59,7 +59,7 @@ g.links {
 
 g.link-extensions {
   stroke: #6399cf;
-  stroke-width: 1.5px;
+  stroke-width: 2px;
 }
 
 g.nodes text {
@@ -71,6 +71,13 @@ g.nodes text {
 g.nodes text.emphasize-node {
     font-size: 18px;
     font-weight: 900;
+    fill: #387cc0;
+}
+
+
+g.nodes text.example-node {
+    font-size: 14px;
+    font-weight: 600;
     fill: #387cc0;
 }
 
@@ -89,38 +96,40 @@ text.legend-title  {
   fill:  #454545;
   text-anchor: start;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: normal;
 }
 
 
 
 h2 {
   margin-bottom: 0px;
-  margin-left: 140px;
   margin-top: 0px;
-
 }
 
+
 .chart-hint {
-  width: 180px;
-  margin-left: 10px;
+  width: 200px;
   font-size: 12px;
   border: solid #dadada 1px;
   padding: 5px;
-  margin-top: 5px;
+  margin-top: 10px;
   color: #454545;
 }
 
+
+.chart-hint .emphasize {
+  font-weight: 600;
+  padding-top: 10px;
+}
+
 .chart-hint.legend {
-    margin-top: 40px;
-    margin-left: 95px;
+    width: 180px;
+    margin-top: 50px;
 }
 
 .chart-hint.credits {
-    margin-top: 300px;
-    margin-left: -50px;
-    width: 325px;
-    line-height: 18px;
+    width: 270px;
+    margin-top: 340px;
 }
 
 

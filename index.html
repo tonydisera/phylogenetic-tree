@@ -1,11 +1,11 @@
 <html>
 <head>
 
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,800,900,900i&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/toggle_button.css">
 
 <script src="http://d3js.org/d3.v5.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
 
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -22,7 +22,30 @@
         <h2>Tree of Life for 100 Vertebrates</h2>
       </div>
 
-      <div style="display:flex">
+
+    </div>
+
+    <div style="display:flex;flex-flow:row;">
+      <div style="width:200px">
+        <div class="chart-hint legend" >
+             The bar between the branch and the species name indicates the percent
+             of sequence shared between the species and Human.
+             <div class="emphasize">
+             Hover over the colored bar under a species to see the percentage shared
+             with the Human genome. For example, Elephant is
+             more genetically similar to Human than Mouse.
+             </div>
+        </div>
+
+
+
+
+      </div>
+       <div class="phylo-tree" style="width:720px;height:720px">
+      </div>
+
+
+      <div style="display:flex;flex-flow:column;align-items:flex-end;margin-left:-150px;margin-top: 45px">
         <div id="toggle-button-container">
           <span id="toggle-button-label" >Branch Length</span>
           <div id="toggle-button"></div>
@@ -31,32 +54,27 @@
              Branch length indicates estimated genetic change, calculated by comparing
              sequence from different species. The longer the branch, the more
              divergence that has occurred.
-        </div>
-      </div>
-    </div>
-
-    <div style="display:flex">
-      <div class="phylo-tree" style="width:700px;height:700px">
-      </div>
-      <div>
-        <div class="chart-hint legend" >
-             The bar between the branch and the species name indicates the percent
-             of sequence shared between the species and Human.  Hover over the
-             bar to see the percentage.
+             <div class="emphasize">
+             Toogle "Show" to notice the longer branches.  For example,the Lamprey  diverges significantly from other vertebrates.
+             </div>
         </div>
         <div class="chart-hint credits">
-          Credits
-          </br>
-          &nbsp;&nbsp;&nbsp;&nbsp;Data source:
-          <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">UCSC Browser Human Multi-alignments</a>
-          <br>
-          &nbsp;&nbsp;&nbsp;&nbsp;The D3 phylogenetic tree: <a href="https://observablehq.com/@mbostock/tree-of-life" target="_new">Mike Bostock Tree of Life</a>
-          <br>
-          &nbsp;&nbsp;&nbsp;&nbsp;The gradient legend: <a href="https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244" target="_new">John Guerra Continuous Scales</a>
-        </div>
+          <div>
+            Data:
+            <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">UCSC Browser Human Multi-alignments</a>
+            </div>
+          <div style="padding-top: 4px">
+            D3 phylogenetic tree: <a href="https://observablehq.com/@mbostock/tree-of-life" target="_new">Mike Bostock Tree of Life</a>
+          </div>
 
+          <div style="padding-top: 4px">
+            Gradient legend: <a href="https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244" target="_new">John Guerra Continuous Scales</a>
+          </div>
+        </div>
       </div>
+
     </div>
+
   </div>
 </div>
     <script src="js/newick.js"></script>
