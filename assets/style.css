@@ -108,7 +108,7 @@ h2 {
 
 
 .chart-hint {
-  width: 200px;
+  width: 125px;
   font-size: 12px;
   border: solid #819fad5c 1px;
   padding: 5px;
@@ -124,13 +124,13 @@ h2 {
 }
 
 .chart-hint.legend {
-    width: 180px;
+    width: 125px;
     margin-top: 50px;
 }
 
 .chart-hint.credits {
     width: 270px;
-    margin-top: 340px;
+    margin-top:230px;
 }
 
 
