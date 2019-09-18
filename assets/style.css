@@ -131,11 +131,12 @@ h2 {
 .chart-hint.credits {
     width: 270px;
     margin-top:230px;
+    margin-left: -150px;
 }
 
 
 #toggle-button-container {
-  margin-left: 45px;
+  margin-left: -110px;
   display: flex;
 }
 #toggle-button {
