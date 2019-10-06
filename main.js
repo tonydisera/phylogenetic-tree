@@ -56,6 +56,8 @@ $(document).ready(function() {
     updateBranch(false)
   });
   branchToggleButton.addButton('Show', false, 'click', function(){
+     $('.collapse.show').removeClass("show");
+    $('#collapseOne').addClass("show")
     updateBranch(true)
   });
   branchToggleButton.append('#branch-toggle-button');
@@ -69,6 +71,8 @@ $(document).ready(function() {
   });
   similarityToggleButton.addButton('Show', false, 'click', function(){
     showSimilarity = true;
+    $('.collapse.show').removeClass("show");
+    $('#collapseTwo').addClass("show")
     drawTree(treeObject, getChartOptions())
   });
   similarityToggleButton.append('#similarity-toggle-button');
@@ -83,6 +87,8 @@ $(document).ready(function() {
   });
   sizeToggleButton.addButton('Show', false, 'click', function(){
     showGenomeSize = true;
+    $('.collapse.show').removeClass("show");
+    $('#collapseThree').addClass("show")
     drawTree(treeObject, getChartOptions())
   });
   sizeToggleButton.append('#genome-size-toggle-button');

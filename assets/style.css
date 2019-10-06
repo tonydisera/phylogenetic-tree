@@ -91,9 +91,9 @@ g.nodes text.deemphasize-node {
 }
 
 g.nodes text.example-node {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    fill: #387cc0;
+    fill:  #0e9991;
 }
 
 g.nodes text.emphasize-node.label--active {
@@ -162,7 +162,20 @@ h2 {
 }
 
 .card-header h2 button {
-   font-size: 14px;
-   color: #387cc0;
-   padding: 0px;
+    font-size: 14px;
+    color: #7c7c7c;
+    padding: 0px;
+    font-weight: 500;
+}
+.show-me {
+  font-size: 12px !important;
+  font-weight: bold !important;
+  color: #0e9991 !important;
+  line-height: 14px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  vertical-align: top !important;
+  border: thin solid #0e9991 !important;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
 }

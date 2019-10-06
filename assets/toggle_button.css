@@ -24,15 +24,15 @@
     height: 100%;
     text-align: center;
     vertical-align: middle;
-    line-height: 21px;
+    line-height: 20px;
     transition: background-color .4s linear, color .2s linear;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .active-strip-button {
-    background-color: #387cc0;
+    background-color: #648eaa;
     color: white;
 }
 
