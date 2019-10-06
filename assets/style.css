@@ -33,6 +33,10 @@ div.topic-title {
     display: flex;
 }
 
+div.topic-title h2 {
+  margin-left: 100px;
+}
+
 .phylo-tree svg {
     margin-top: -80px;
     width: 900px;
@@ -74,6 +78,17 @@ g.nodes text.emphasize-node {
     fill: #387cc0;
 }
 
+g.nodes g.genome-size circle {
+  fill: #9a9a9a69;
+  stroke: #717171;
+}
+
+
+g.nodes text.deemphasize-node {
+
+    font-weight: normal;
+    fill: lightgray;
+}
 
 g.nodes text.example-node {
     font-size: 14px;
@@ -108,11 +123,9 @@ h2 {
 
 
 .chart-hint {
-  width: 125px;
   font-size: 12px;
-  border: solid #819fad5c 1px;
   padding: 5px;
-  margin-top: 10px;
+  margin-top: 0px;
   color: #454545;
 }
 
@@ -124,32 +137,32 @@ h2 {
 }
 
 .chart-hint.legend {
-    width: 125px;
-    margin-top: 50px;
 }
 
 .chart-hint.credits {
-    width: 270px;
-    margin-top:230px;
-    margin-left: -150px;
+
 }
 
 
 #toggle-button-container {
-  margin-left: -110px;
   display: flex;
 }
-#toggle-button {
+.toggle-button {
   padding-top: 4px;
 }
 #toggle-button-label {
   padding-top: 6px;
   font-size: 15px;
-  min-width: 110px;
 }
 #legend-label {
   font-size: 14px;
   width: 130px;
   display: inline-block;
   margin-left: 72px;
+}
+
+.card-header h2 button {
+   font-size: 14px;
+   color: #387cc0;
+   padding: 0px;
 }

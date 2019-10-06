@@ -7,11 +7,15 @@
 
 <script src="http://d3js.org/d3.v5.js"></script>
 
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 <script
   src="https://code.jquery.com/jquery-3.4.1.min.js"
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -26,15 +30,127 @@
     </div>
 
     <div style="display:flex;flex-flow:row;">
-      <div style="width:140px">
-        <div class="chart-hint legend" >
-             The bar between the branch and the species name indicates the percent
-             of sequence shared between the species and Human.
-             <div class="emphasize">
-             Hover over the colored bar under a species to see the percentage shared
-             with the Human genome. For example, Elephant is
-             more genetically similar to Human than Mouse.
-             </div>
+      <div style="width:250px;margin-right:20px;margin-top:10px">
+
+        <div class="accordion" id="accordionExample">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <button  onclick="resetChart()" class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Branch length
+                </button>
+              </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <div id="toggle-button-container">
+                  <div id="branch-toggle-button" class="toggle-button"></div>
+                </div>
+                <div class="chart-hint">
+                     Branch length indicates estimated genetic change, calculated by comparing
+                     sequence from different species. The longer the branch, the more
+                     divergence that has occurred.
+                     <div class="emphasize">
+                     Toogle "Show" to notice the longer branches.  For example,the Lamprey  diverges significantly from other vertebrates.
+                     </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button onclick="resetChart();onShowSimilarity()" class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Sequence shared with Human
+                </button>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body">
+                <div id="toggle-button-container">
+                  <div id="similarity-toggle-button" class="toggle-button"></div>
+                </div>
+
+                <div class="chart-hint legend" >
+                     The bar between the branch and the species name indicates the percent
+                     of sequence shared between the species and Human.
+                     <div class="emphasize">
+                     Hover over the colored bar under a species to see the percentage shared
+                     with the Human genome. For example, Elephant is
+                     more genetically similar to Human than Mouse.  <button onclick="highlightExample('Elephant,Mouse')" class="sm primary">Show me</button>
+                     </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h2 class="mb-0">
+                <button onclick="resetChart();onShowGenomeSize()" class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Genome Size
+                </button>
+              </h2>
+
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+              <div class="card-body">
+
+
+                <div id="toggle-button-container">
+                  <div id="genome-size-toggle-button" class="toggle-button"></div>
+                </div>
+
+                <div class="chart-hint legend" >
+                  Genome sizes can vary greatly.  Toggle to show the genome size for each species, represented by the
+                  size of the circle.
+                  <br><br>Notice the genome sizes of fish, which are considerably smaller than other
+                  vertebrates.
+                  <button class="sm primary" onclick="highlightExample('Mexican_tetra,Zebrafish,Atlantic_cod,Stickleback,Southern_platyfish,Medaka,Tetraodon,Fugu,Yellowbelly_pufferfish,Nile_tilapia,Princess_of_Burundi,Burton\'s_mouthbreeder,Zebra_mbuna,Pundamilia_nyererei', false)">Show me</button>
+                  <br><br>Notice the large genome size of the Aardvark and Cape golden mole.
+                  <button class="sm primary" onclick="highlightExample('Aardvark,Cape_golden_mole', false)">Show me</button>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingFour">
+              <h2 class="mb-0">
+                <button onclick="resetChart()" class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                  Credits
+                </button>
+              </h2>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+              <div class="card-body">
+                <div class="chart-hint credits">
+                  <div>
+                    Data:<br>
+                    <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">UCSC Browser Human Multi-alignments</a>
+                    <a href="https://www.kaggle.com/camnugent/genome-information-for-sequenced-organisms/version/1">Genome Information For Sequenced Organisms</a>
+                    </div>
+                  <div style="padding-top: 4px">
+                    D3 phylogenetic tree: <br><a href="https://observablehq.com/@mbostock/tree-of-life" target="_new">Mike Bostock Tree of Life</a>
+                  </div>
+
+                  <div style="padding-top: 4px">
+                    Gradient legend: <br><a href="https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244" target="_new">John Guerra Continuous Scales</a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
         </div>
 
 
@@ -44,34 +160,6 @@
        <div class="phylo-tree" style="width:720px;height:720px">
       </div>
 
-
-      <div style="display:flex;flex-flow:column;align-items:flex-start;margin-left:-60px;margin-top: 40px">
-        <div id="toggle-button-container">
-          <span id="toggle-button-label" >Branch Length</span>
-          <div id="toggle-button"></div>
-        </div>
-        <div class="chart-hint">
-             Branch length indicates estimated genetic change, calculated by comparing
-             sequence from different species. The longer the branch, the more
-             divergence that has occurred.
-             <div class="emphasize">
-             Toogle "Show" to notice the longer branches.  For example,the Lamprey  diverges significantly from other vertebrates.
-             </div>
-        </div>
-        <div class="chart-hint credits">
-          <div>
-            Data:
-            <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">UCSC Browser Human Multi-alignments</a>
-            </div>
-          <div style="padding-top: 4px">
-            D3 phylogenetic tree: <a href="https://observablehq.com/@mbostock/tree-of-life" target="_new">Mike Bostock Tree of Life</a>
-          </div>
-
-          <div style="padding-top: 4px">
-            Gradient legend: <a href="https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244" target="_new">John Guerra Continuous Scales</a>
-          </div>
-        </div>
-      </div>
 
     </div>
 

@@ -1,101 +1,101 @@
-size,species,ratio_same_as_human
-3137161264,Human,1.0000
-3309577922,Chimp,0.9528
-3029553646,Gorilla,0.8988
-3446771396,Orangutan,0.9135
-2962077449,Gibbon,0.8776
-2969988180,Rhesus,0.8286
-2946843737,Crab eating macaque,0.8667
-2867564654,Baboon,0.8281
-2789656328,Green monkey,0.8645
-2914958544,Marmoset,0.7065
-2608572064,Squirrel monkey,0.6960
-2519724550,Bushbaby,0.5483
-2846580235,Chinese tree shrew,0.4656
-2478393770,Squirrel,0.4972
-2835242767,Lesser Egyptian jerboa,0.3511
-2287340943,Prairie vole,0.3229
-2360146428,Chinese hamster,0.3399
-2504925039,Golden hamster,0.3161
-2730871774,Mouse,0.3525
-2909698938,Rat,0.3166
-2618204639,Naked mole rat,0.4760
-2723219641,Guinea pig,0.4368
-2390852391,Chinchilla,0.4701
-2995882938,Brush tailed rat,0.4139
-2737490501,Rabbit,0.4432
-2229835716,Pika,0.3468
-2808525991,Pig,0.4598
-2172177994,Alpaca,0.5019
-2009194609,Bactrian camel,0.5042
-2551996573,Dolphin,0.5116
-2372919877,Killer whale,0.5207
-2696886330,Tibetan antelope,0.4686
-2981119579,Cow,0.4697
-2619054388,Sheep,0.4683
-2635848900,Domestic goat,0.4650
-2484532062,Horse,0.5705
-2464367180,White rhinoceros,0.5810
-2455541136,Cat,0.5243
-2410976875,Dog,0.5185
-2410758013,Ferret,0.5099
-2299509015,Panda,0.5002
-2400133628,Pacific walrus,0.5356
-3156902762,Weddell seal,0.5242
-1985958707,Black flying fox,0.4967
-1996076410,Megabat,0.4541
-2059799708,David's myotis,0.3979
-2034575300,Microbat,0.3989
-2026627185,Big brown bat,0.4022
-2715720925,Hedgehog,0.2615
-2423158183,Shrew,0.2768
-1769657897,Star-nosed mole,0.3703
-3196760833,Elephant,0.4664
-3843982861,Cape elephant shrew,0.2768
-3103808406,Manatee,0.4658
-4210110458,Cape golden mole,0.3421
-2947024286,Tenrec,0.3014
-4444080527,Aardvark,0.4167
-3631522711,Armadillo,0.4657
-3605631728,Opossum,0.1436
-3174693010,Tasmanian devil,0.0741
-3075184024,Wallaby,0.0653
-1996811212,Platypus,0.0763
-1174811715,Saker falcon,0.0381
-1171973431,Peregrine falcon,0.0388
-1118343587,Collared flycatcher,0.0372
-1052600561,White throated sparrow,0.0348
-1065292181,Medium ground finch,0.0350
-1232135591,Zebra finch,0.0532
-1042997632,Tibetan ground jay,0.0398
-1117373619,Budgerigar,0.0358
-1175404042,Puerto Rican parrot,0.0330
-1204700227,Scarlet macaw,0.0291
-1107989085,Rock pigeon,0.0368
-1105052351,Mallard duck,0.0351
-1046932099,Chicken,0.0368
-1061817101,Turkey,0.0265
-2174259888,American alligator,0.0708
-2208410377,Green seaturtle,0.0370
-2589745704,Painted turtle,0.0372
-2202483752,Chinese softshell turtle,0.0327
-1931078847,Spiny softshell turtle,0.0295
-1799143587,Lizard,0.0355
-1437530879,Frog X. tropicalis,0.0315
-2860591921,Coelacanth,0.0275
-358618246,Tetraodon,0.0171
-391484715,Fugu,0.0170
-377992166,Yellowbelly pufferfish,0.0106
-927696114,Nile tilapia,0.0183
-847883811,Princess of Burundi,0.0122
-831398301,Burton's mouthbreeder,0.0122
-849595388,Zebra mbuna,0.0124
-830129318,Pundamilia nyererei,0.0122
-869000216,Medaka,0.0185
-729664433,Southern platyfish,0.0184
-463354448,Stickleback,0.0192
-824327835,Atlantic cod,0.0155
-1412464843,Zebrafish,0.0279
-1191259254,Mexican tetra,0.0127
-945874548,Spotted gar,0.0152
-885550958,Lamprey,0.0105
+size,species,scientific_name,ratio_same_as_human
+3137161264,Human,Homo sapiens,1
+3309577922,Chimp,Pan troglodytes,0.9528
+3029553646,Gorilla,Gorilla gorilla gorilla,0.8988
+3446771396,Orangutan,Pongo abelii,0.9135
+2962077449,Gibbon,Nomascus leucogenys,0.8776
+2969988180,Rhesus,Macaca mulatta,0.8286
+2946843737,Crab eating macaque,Macaca fascicularis,0.8667
+2867564654,Baboon,Papio anubis,0.8281
+2789656328,Green monkey,Chlorocebus sabaeus,0.8645
+2914958544,Marmoset,Callithrix jacchus,0.7065
+2608572064,Squirrel monkey,Saimiri boliviensis boliviensis,0.696
+2519724550,Bushbaby,Otolemur garnettii,0.5483
+2846580235,Chinese tree shrew,Tupaia chinensis,0.4656
+2478393770,Squirrel,Spermophilus dauricus,0.4972
+2835242767,Lesser Egyptian jerboa,Jaculus jaculus,0.3511
+2287340943,Prairie vole,Microtus ochrogaster,0.3229
+2360146428,Chinese hamster,Cricetulus griseus,0.3399
+2504925039,Golden hamster,Mesocricetus auratus,0.3161
+2730871774,Mouse,Mus musculus,0.3525
+2909698938,Rat,Rattus norvegicus,0.3166
+2618204639,Naked mole rat,Heterocephalus glaber,0.476
+2723219641,Guinea pig,Cavia porcellus,0.4368
+2390852391,Chinchilla,Chinchilla lanigera,0.4701
+2995882938,Brush tailed rat,Octodon degus,0.4139
+2737490501,Rabbit,Oryctolagus cuniculus,0.4432
+2229835716,Pika,Ochotona princeps,0.3468
+2808525991,Pig,Sus scrofa,0.4598
+2172177994,Alpaca,Vicugna pacos,0.5019
+2009194609,Bactrian camel,Camelus ferus,0.5042
+2551996573,Dolphin,Tursiops truncatus,0.5116
+2372919877,Killer whale,Orcinus orca,0.5207
+2696886330,Tibetan antelope,Pantholops hodgsonii,0.4686
+2981119579,Cow,Bos taurus,0.4697
+2619054388,Sheep,Ovis aries,0.4683
+2635848900,Domestic goat,Capra hircus,0.465
+2484532062,Horse,Equus caballus,0.5705
+2464367180,White rhinoceros,Ceratotherium simum simum,0.581
+2455541136,Cat,Felis catus,0.5243
+2410976875,Dog,Canis lupus familiaris,0.5185
+2410758013,Ferret,Mustela putorius furo,0.5099
+2299509015,Panda,Ailuropoda melanoleuca,0.5002
+2400133628,Pacific walrus,Odobenus rosmarus divergens,0.5356
+3156902762,Weddell seal,Leptonychotes weddellii,0.5242
+1985958707,Black flying fox,Pteropus alecto,0.4967
+1996076410,Megabat,Pteropus vampyrus,0.4541
+2059799708,David's myotis,Myotis davidii,0.3979
+2034575300,Microbat,Myotis lucifugus,0.3989
+2026627185,Big brown bat,Eptesicus fuscus,0.4022
+2715720925,Hedgehog,Erinaceus europaeus,0.2615
+2423158183,Shrew,Sorex araneus,0.2768
+1769657897,Star-nosed mole,Condylura cristata,0.3703
+3196760833,Elephant,Loxodonta africana,0.4664
+3843982861,Cape elephant shrew,Elephantulus edwardii,0.2768
+3103808406,Manatee,Trichechus manatus latirostris,0.4658
+4210110458,Cape golden mole,Chrysochloris asiatica,0.3421
+2947024286,Tenrec,Echinops telfairi,0.3014
+4444080527,Aardvark,Orycteropus afer afer,0.4167
+3631522711,Armadillo,Dasypus novemcinctus,0.4657
+3605631728,Opossum,Monodelphis domestica,0.1436
+3174693010,Tasmanian devil,Sarcophilus harrisii,0.0741
+3075184024,Wallaby,Notamacropus eugenii,0.0653
+1996811212,Platypus,Ornithorhynchus anatinus,0.0763
+1174811715,Saker falcon,Falco cherrug,0.0381
+1171973431,Peregrine falcon,Falco peregrinus,0.0388
+1118343587,Collared flycatcher,Ficedula albicollis,0.0372
+1052600561,White throated sparrow,Zonotrichia albicollis,0.0348
+1065292181,Medium ground finch,Geospiza fortis,0.035
+1232135591,Zebra finch,Taeniopygia guttata,0.0532
+1042997632,Tibetan ground jay,Pseudopodoces humilis,0.0398
+1117373619,Budgerigar,Melopsittacus undulatus,0.0358
+1175404042,Puerto Rican parrot,Amazona vittata,0.033
+1204700227,Scarlet macaw,Ara macao,0.0291
+1107989085,Rock pigeon,Columba livia,0.0368
+1105052351,Mallard duck,Anas platyrhynchos,0.0351
+1046932099,Chicken,Gallus gallus,0.0368
+1061817101,Turkey,Meleagris gallopavo,0.0265
+2174259888,American alligator,Alligator mississippiensis,0.0708
+2208410377,Green seaturtle,Chelonia mydas,0.037
+2589745704,Painted turtle,Chrysemys picta bellii,0.0372
+2202483752,Chinese softshell turtle,Pelodiscus sinensis,0.0327
+1931078847,Spiny softshell turtle,Apalone spinifera,0.0295
+1799143587,Lizard,Anolis carolinensis,0.0355
+1437530879,Frog X. tropicalis,Xenopus tropicalis,0.0315
+2860591921,Coelacanth,Latimeria chalumnae,0.0275
+358618246,Tetraodon,Tetraodon nigroviridis,0.0171
+391484715,Fugu,Takifugu rubripes,0.017
+377992166,Yellowbelly pufferfish,Takifugu flavidus,0.0106
+927696114,Nile tilapia,Oreochromis niloticus,0.0183
+847883811,Princess of Burundi,Neolamprologus brichardi,0.0122
+831398301,Burton's mouthbreeder,Haplochromis burtoni,0.0122
+849595388,Zebra mbuna,Maylandia zebra,0.0124
+830129318,Pundamilia nyererei,Pundamilia nyererei,0.0122
+869000216,Medaka,Oryzias latipes,0.0185
+729664433,Southern platyfish,Xiphophorus maculatus,0.0184
+463354448,Stickleback,Gasterosteus aculeatus,0.0192
+824327835,Atlantic cod,Gadus morhua,0.0155
+1412464843,Zebrafish,Danio rerio,0.0279
+1191259254,Mexican tetra,Astyanax mexicanus,0.0127
+945874548,Spotted gar,Lepisosteus oculatus,0.0152
+885550958,Lamprey,Petromyzon marinus,0.0105

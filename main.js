@@ -26,7 +26,9 @@ let linkExtension = null
 let node = null
 let phyloFileName      = "data/hg19.100way.commonNames.nh";
 let similarityFileName = "data/species_multialign_info.csv";
-let speciesSimilarity = {}
+let genomeInfoFileName = "data/eukaryotes.csv";
+let speciesInfo = {}
+let scientificNameToSpecies = {}
 let barHeight = 18
 let barWidth = 5
 let barPadding = 3
@@ -35,30 +37,89 @@ var colorScale = d3.scaleSequential()
                    .domain([0,1])
                    .interpolator(d3.interpolateYlGnBu)
 
+
+var genomeSizeScale = null;
+var genomeColorScale = null;
+var genomeSizeMaxRadius = 8;
+var genomeSizeMinRadius = 1;
+
+let treeObject = null;
+let showSimilarity = false;
+let showGenomeSize = false;
+
 $(document).ready(function() {
 
-  var toggleButton = new ButtonStrip({
+  var branchToggleButton = new ButtonStrip({
     id: 'the-toggle-button'
   });
-  toggleButton.addButton('Hide', true, 'click', function(){
-    update(false)
+  branchToggleButton.addButton('Hide', true, 'click', function(){
+    updateBranch(false)
   });
-  toggleButton.addButton('Show', false, 'click', function(){
-    update(true)
+  branchToggleButton.addButton('Show', false, 'click', function(){
+    updateBranch(true)
   });
-  toggleButton.append('#toggle-button');
+  branchToggleButton.append('#branch-toggle-button');
+
+  var similarityToggleButton = new ButtonStrip({
+    id: 'the-similarity-toggle-button'
+  });
+  similarityToggleButton.addButton('Hide', true, 'click', function(){
+    showSimilarity = false;
+    drawTree(treeObject, getChartOptions())
+  });
+  similarityToggleButton.addButton('Show', false, 'click', function(){
+    showSimilarity = true;
+    drawTree(treeObject, getChartOptions())
+  });
+  similarityToggleButton.append('#similarity-toggle-button');
 
 
+  var sizeToggleButton = new ButtonStrip({
+    id: 'the-genome-size-toggle-button'
+  });
+  sizeToggleButton.addButton('Hide', true, 'click', function(){
+    showGenomeSize = false;
+    drawTree(treeObject, getChartOptions())
+  });
+  sizeToggleButton.addButton('Show', false, 'click', function(){
+    showGenomeSize = true;
+    drawTree(treeObject, getChartOptions())
+  });
+  sizeToggleButton.append('#genome-size-toggle-button');
 
 
   promiseParseTreeData()
-  .then(function(treeObject) {
-    drawTree(treeObject);
+  .then(function(theTreeObject) {
+    treeObject = theTreeObject
+    drawTree(treeObject, getChartOptions);
   })
 
 
 
 })
+
+function onShowSimilarity() {
+  $('#similarity-toggle-button .strip-button-1').addClass("active-strip-button");
+  $('#similarity-toggle-button .strip-button-0').removeClass("active-strip-button");
+  showSimilarity = true;
+  drawTree(treeObject, getChartOptions())
+
+}
+
+function onShowGenomeSize() {
+  $('#genome-size-toggle-button .strip-button-1').addClass("active-strip-button");
+  $('#genome-size-toggle-button .strip-button-0').removeClass("active-strip-button");
+  showGenomeSize = true;
+  drawTree(treeObject, getChartOptions())
+
+}
+
+function getChartOptions() {
+  return {
+    'showSimilarity': showSimilarity,
+    'showGenomeSize': showGenomeSize
+  }
+}
 
 function promiseParseTreeData() {
   return new Promise(function(resolve, reject) {
@@ -89,16 +150,23 @@ function promiseParseTreeData() {
 
 function parseSimilarityData(similarityData) {
   similarityData.forEach(function(rec) {
-    let speciesName = rec.species.replace(/ /g, "_")
-    speciesSimilarity[speciesName] = +rec.ratio_same_as_human;
+    let speciesName = rec.species.replace(/ /g, "_");
+
+    speciesInfo[speciesName] = {species:         speciesName,
+                                ratioToHuman:    +rec.ratio_same_as_human,
+                                scientific_name: rec.scientific_name,
+                                genomeSize:     +rec.size};
+
+    scientificNameToSpecies[rec.scientific_name] = speciesName;
   })
 }
 
 
-function drawTree(treeObject) {
 
-// Define the div for the tooltip
-tooltip = d3.select("body").append("div")
+function drawTree(treeObject, options) {
+
+  // Define the div for the tooltip
+  tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -121,6 +189,7 @@ tooltip = d3.select("body").append("div")
 
   let container = d3.select(".phylo-tree");
 
+  container.select("svg").remove();
 
   let svg = container.append("svg")
              .attr("width", width )
@@ -128,7 +197,24 @@ tooltip = d3.select("body").append("div")
              .style("font", "10px sans-serif")
              .attr("viewBox", [-outerRadius, -outerRadius, width, width]);
 
-  drawLegend(svg);
+  if (options.showSimilarity) {
+    drawSimilarityLegend(svg);
+  }
+
+  if (options.showGenomeSize) {
+    let genomeSizes = d3.entries(speciesInfo).map(function(d){return d.value})
+    genomeSizeScale = d3.scaleLinear()
+                         .domain(d3.extent(genomeSizes, function(d,i) {
+                            return +d.genomeSize;
+                         }))
+                         .range([genomeSizeMinRadius,genomeSizeMaxRadius])
+
+    genomeSizeColorScale = d3.scaleSequential()
+                         .domain(d3.extent(genomeSizes, function(d,i) {
+                            return +d.genomeSize;
+                         }))
+                         .interpolator(d3.interpolateGreys)
+  }
 
   let group = svg.append("g")
                  .attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
@@ -154,69 +240,109 @@ tooltip = d3.select("body").append("div")
       .attr("class", "nodes")
 
 
-  let similarity = node.selectAll("g.similarity")
-      .data(root.leaves())
-      .join("g")
-      .attr("class", "similarity")
-      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
+  if (options.showSimilarity) {
+    let similarity = node.selectAll("g.similarity")
+        .data(root.leaves())
+        .join("g")
+        .attr("class", "similarity")
+        .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
 
-  similarity.append("rect")
-            .attr("width", barWidth)
-            .attr("height", d => {
-              if (barHeightIsRatio) {
-                let ratio = speciesSimilarity[d.data.name];
-                if (ratio) {
-                  return Math.max(barWidth, ratio * (barHeight-barPadding));
+    similarity.append("rect")
+              .attr("width", barWidth)
+              .attr("height", d => {
+                if (barHeightIsRatio) {
+                  let ratio = speciesInfo[d.data.name].ratioToHuman;
+                  if (ratio) {
+                    return Math.max(barWidth, ratio * (barHeight-barPadding));
+                  } else {
+                    return 0;
+                  }
                 } else {
-                  return 0;
+                  return barHeight - barPadding;
                 }
-              } else {
-                return barHeight - barPadding;
-              }
-            })
-            .attr("x", -barPadding)
-            .attr("y", d => {
-              if (barHeightIsRatio) {
-                let ratio = speciesSimilarity[d.data.name];
-                if (d.x >= 180) {
-                  return Math.min(-barWidth, ((-barHeight+barPadding) * ratio));
+              })
+              .attr("x", -barPadding)
+              .attr("y", d => {
+                if (barHeightIsRatio) {
+                  let ratio = speciesInfo[d.data.name].ratioToHuman;
+                  if (d.x >= 180) {
+                    return Math.min(-barWidth, ((-barHeight+barPadding) * ratio));
+                  } else {
+                    return 0;
+                  }
                 } else {
-                  return 0;
+                  if (d.x >= 180) {
+                    return -barHeight+barPadding;
+                  } else {
+                    return 0;
+                  }
                 }
-              } else {
-                if (d.x >= 180) {
-                  return -barHeight+barPadding;
-                } else {
-                  return 0;
-                }
-              }
-            })
-            .attr("fill", d => {
-              let ratio = speciesSimilarity[d.data.name];
-              return colorScale(ratio);
-            })
-            .on("mouseover", mouseOverRatio(true))
-            .on("mouseout", mouseOverRatio(false))
+              })
+              .attr("fill", d => {
+                let ratio = speciesInfo[d.data.name].ratioToHuman;
+                return colorScale(ratio);
+              })
+              .on("mouseover", mouseOverRatio(true))
+              .on("mouseout", mouseOverRatio(false))
+
+  } else {
+    node.selectAll("g.similarity").remove()
+  }
+
+  let shiftOut = null;
+  if (options.showSimilarity) {
+    shiftOut = innerRadius + barHeight + barPadding  + genomeSizeMaxRadius/2 + 4;
+  } else {
+    shiftOut = innerRadius + genomeSizeMaxRadius/2 +  4;
+  }
+  if (options.showGenomeSize) {
+    let genomeSize = node.selectAll("g.genome-size")
+        .data(root.leaves())
+        .join("g")
+        .attr("class", "genome-size")
+        .attr("transform", d => `rotate(${d.x - 90}) translate(${shiftOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
+
+    genomeSize.append("circle")
+              .attr("r", d => {
+                return genomeSizeScale(speciesInfo[d.data.name].genomeSize)
+              })
+              .attr("x", -barPadding)
+              .attr("y", d => {
+                return 0;
+              })
+              //.attr("fill", d => {
+              //  let size = speciesInfo[d.data.name].sizeMB;
+              //  //return genomeSizeColorScale(size);
+              //
+              //})
+
+              //.on("mouseover", mouseOverRatio(true))
+              //.on("mouseout", mouseOverRatio(false))
+
+  } else {
+    node.selectAll("g.genome-size").remove()
+  }
 
 
+  shiftOut = null;
+  if (options.showSimilarity) {
+    shiftOut = innerRadius + barHeight + barPadding  + 4;
+  } else {
+    shiftOut = innerRadius + 4;
+  }
+  if (options.showGenomeSize) {
+    shiftOut +=  (genomeSizeMaxRadius) + barPadding;
+  }
   node.selectAll("text")
       .data(root.leaves())
       .join("text")
       .attr("class", function(d,i) {
         if (d.data.name == 'Human') {
           return 'emphasize-node';
-        } else if (d.data.name == 'Lamprey') {
-          return 'example-node';
-        } else if (d.data.name == 'Elephant') {
-          return 'example-node';
-        } else if (d.data.name == 'Mouse') {
-          return 'example-node';
-        } else {
-          return '';
         }
       })
       .attr("dy", ".31em")
-      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + barHeight + barPadding + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
+      .attr("transform", d => `rotate(${d.x - 90}) translate(${shiftOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
       .attr("text-anchor", d => d.x < 180 ? "start" : "end")
       .text(d => {
         return d.data.name.replace(/_/g, " ")
@@ -224,17 +350,50 @@ tooltip = d3.select("body").append("div")
       .on("mouseover", mouseovered(true))
       .on("mouseout", mouseovered(false));
 
-  update(false)
+  updateBranch(false)
 
 }
 
-function update(checked) {
+function updateBranch(checked) {
   const t = d3.transition().duration(750);
   linkExtension.transition(t).attr("d", checked ? linkExtensionVariable : linkExtensionConstant);
   link.transition(t).attr("d", checked ? linkVariable : linkConstant);
 }
 
-function drawLegend(svg) {
+
+function highlightExample(speciesNamesStr, emphasizeHuman=true) {
+  let speciesNames = speciesNamesStr.split(",");
+  d3.select(".phylo-tree")
+     .selectAll("g.nodes text")
+     .attr("class", function(d,i) {
+
+        if (speciesNames.indexOf(d.data.name) >= 0) {
+          return 'example-node';
+        } else if (emphasizeHuman && d.data.name == 'Human') {
+          return 'emphasize-node';
+        } else {
+          return 'deemphasize-node';
+        }
+     })
+
+}
+
+function resetChart() {
+
+  d3.select(".phylo-tree")
+     .selectAll("g.nodes text")
+     .attr("class", function(d,i) {
+
+        if (d.data.name == 'Human') {
+          return 'emphasize-node';
+        } else {
+          return '';
+        }
+     })
+
+}
+
+function drawSimilarityLegend(svg) {
 
   legendWidth = 80;
 
@@ -254,7 +413,7 @@ function drawLegend(svg) {
 
   var axis = svg.append("g")
     .attr("class", "axis")
-    .attr("transform", "translate(-375, " + (-(width/2)+230) + ")");
+    .attr("transform", "translate(170, " + (-(width/2)+190) + ")");
 
   axis.call(d3.axisBottom(xScale).ticks(5));
   axis.append("text")
@@ -332,7 +491,7 @@ function linkStep(startAngle, startRadius, endAngle, endRadius) {
 function mouseOverRatio(active) {
   return function(d) {
     if (active) {
-      let ratio = speciesSimilarity[d.data.name];
+      let ratio = speciesInfo[d.data.name].ratioToHuman;
       let pct = Math.round(ratio * 100,0);
       tooltip.transition()
           .duration(200)
