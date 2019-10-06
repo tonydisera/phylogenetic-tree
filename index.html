@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="assets/toggle_button.css">
 
 <script src="http://d3js.org/d3.v5.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -51,14 +51,13 @@
                 <div class="chart-hint">
                     <div class="emphasize">
                      To show the branch length, click the toggle button above to "Show".
-                     </div>
+                    </div>
                      <br>
                      Branch length indicates estimated genetic change, calculated by comparing
                      sequence from different species. The longer the branch, the more
                      divergence that has occurred.
-                     <div class="emphasize">
+                     <br>
                      Notice that the Lamprey  diverges significantly from other vertebrates.  <button onclick="highlightExample('Lamprey')" class="btn btn btn-link btn-sm show-me" >Show me</button>
-                     </div>
                 </div>
 
               </div>
@@ -84,9 +83,10 @@
                      of sequence shared between the species and Human.
                      <div class="emphasize">
                      Hover over the colored bar under a species to see the percentage shared
-                     with the Human genome. For example, Elephant is
+                     with the Human genome.
+                    </div>
+                     <br>For example, Elephant is
                      more genetically similar to Human than Mouse.  <button onclick="highlightExample('Elephant,Mouse')" class="btn btn btn-link btn-sm show-me">Show me</button>
-                     </div>
                 </div>
 
               </div>
@@ -113,9 +113,14 @@
                 <div class="chart-hint legend" >
                   Genome sizes can vary greatly.  Toggle to show the genome size for each species, represented by the
                   size of the circle.
-                  <br><br>Notice the genome sizes of fish, which are considerably smaller than other
+                  <div class="emphasize">
+                     Hover over the circle under the species to see the genome size.
+                  </div>
+
+                  <br>Notice the genome sizes of fish, which are considerably smaller than other
                   vertebrates.
-                  <button class="btn btn btn-link btn-sm show-me" onclick="highlightExample('Mexican_tetra,Zebrafish,Atlantic_cod,Stickleback,Southern_platyfish,Medaka,Tetraodon,Fugu,Yellowbelly_pufferfish,Nile_tilapia,Princess_of_Burundi,Burton\'s_mouthbreeder,Zebra_mbuna,Pundamilia_nyererei', false)">Show me</button>
+
+                  <button class="btn btn btn-link btn-sm show-me" onclick="highlightExample('Atlantic_cod,Stickleback,Southern_platyfish,Medaka,Tetraodon,Fugu,Yellowbelly_pufferfish,Nile_tilapia,Princess_of_Burundi,Burton\'s_mouthbreeder,Zebra_mbuna,Pundamilia_nyererei', false)">Show me</button>
                   <br><br>Notice the large genome size of the Aardvark and Cape golden mole.
                   <button class="btn btn btn-link btn-outline btn-sm show-me" onclick="highlightExample('Aardvark,Cape_golden_mole', false)">Show me</button>
                 </div>
@@ -138,14 +143,13 @@
                   <div>
                     Data:<br>
                     <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/" target="_new">UCSC Browser Human Multi-alignments</a>
-                    <a href="https://www.kaggle.com/camnugent/genome-information-for-sequenced-organisms/version/1">Genome Information For Sequenced Organisms</a>
-                    </div>
+                  </div>
                   <div style="padding-top: 4px">
                     D3 phylogenetic tree: <br><a href="https://observablehq.com/@mbostock/tree-of-life" target="_new">Mike Bostock Tree of Life</a>
                   </div>
 
                   <div style="padding-top: 4px">
-                    Gradient legend: <br><a href="https://bl.ocks.org/john-guerra/a75733ba5767813d4f31026d1d5e6244" target="_new">John Guerra Continuous Scales</a>
+                    Legends: <br><a href="https://d3-legend.susielu.com/" target="_new">Susie Lu d3-legend</a>
                   </div>
                 </div>
 

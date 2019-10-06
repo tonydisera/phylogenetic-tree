@@ -31,17 +31,14 @@ let speciesInfo = {}
 let scientificNameToSpecies = {}
 let barHeight = 18
 let barWidth = 5
-let barPadding = 3
+let barPadding = 4
 let barHeightIsRatio = false;
-var colorScale = d3.scaleSequential()
-                   .domain([0,1])
-                   .interpolator(d3.interpolateYlGnBu)
 
 
+var similarityColorScale = null;
 var genomeSizeScale = null;
-var genomeColorScale = null;
-var genomeSizeMaxRadius = 8;
-var genomeSizeMinRadius = 1;
+var genomeSizeMaxRadius = 7;
+var genomeSizeMinRadius = 2;
 
 let treeObject = null;
 let showSimilarity = false;
@@ -158,10 +155,14 @@ function parseSimilarityData(similarityData) {
   similarityData.forEach(function(rec) {
     let speciesName = rec.species.replace(/ /g, "_");
 
+    let genomeSize = (Math.round(+rec.size/1000000)*1000000);
+    let genomeSizeMB = genomeSize / 10**6;
+    genomeSizeMB = (Math.round(genomeSizeMB/100)*100);
+
     speciesInfo[speciesName] = {species:         speciesName,
                                 ratioToHuman:    +rec.ratio_same_as_human,
                                 scientific_name: rec.scientific_name,
-                                genomeSize:     +rec.size};
+                                genomeSize:       genomeSizeMB};
 
     scientificNameToSpecies[rec.scientific_name] = speciesName;
   })
@@ -203,24 +204,29 @@ function drawTree(treeObject, options) {
              .style("font", "10px sans-serif")
              .attr("viewBox", [-outerRadius, -outerRadius, width, width]);
 
-  if (options.showSimilarity) {
-    drawSimilarityLegend(svg);
-  }
 
   if (options.showGenomeSize) {
     let genomeSizes = d3.entries(speciesInfo).map(function(d){return d.value})
-    genomeSizeScale = d3.scaleLinear()
+    genomeSizeScale = d3.scaleQuantize()
                          .domain(d3.extent(genomeSizes, function(d,i) {
                             return +d.genomeSize;
                          }))
-                         .range([genomeSizeMinRadius,genomeSizeMaxRadius])
-
-    genomeSizeColorScale = d3.scaleSequential()
-                         .domain(d3.extent(genomeSizes, function(d,i) {
-                            return +d.genomeSize;
-                         }))
-                         .interpolator(d3.interpolateGreys)
+                         .range(d3.ticks(genomeSizeMinRadius,genomeSizeMaxRadius, 5))
   }
+
+  if (options.showSimilarity) {
+    similarityColorScale = d3.scaleQuantize()
+                             .domain([0,1])
+                             .range(d3.quantize(d3.interpolateYlGnBu, 5))
+  }
+
+  if (options.showSimilarity) {
+    drawSimilarityLegend(svg);
+  }
+  if (options.showGenomeSize) {
+    drawGenomeSizeLegend(svg);
+  }
+
 
   let group = svg.append("g")
                  .attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
@@ -286,7 +292,7 @@ function drawTree(treeObject, options) {
               })
               .attr("fill", d => {
                 let ratio = speciesInfo[d.data.name].ratioToHuman;
-                return colorScale(ratio);
+                return similarityColorScale(ratio);
               })
               .on("mouseover", mouseOverRatio(true))
               .on("mouseout", mouseOverRatio(false))
@@ -316,14 +322,8 @@ function drawTree(treeObject, options) {
               .attr("y", d => {
                 return 0;
               })
-              //.attr("fill", d => {
-              //  let size = speciesInfo[d.data.name].sizeMB;
-              //  //return genomeSizeColorScale(size);
-              //
-              //})
-
-              //.on("mouseover", mouseOverRatio(true))
-              //.on("mouseout", mouseOverRatio(false))
+              .on("mouseover", mouseOverGenomeSize(true))
+              .on("mouseout", mouseOverGenomeSize(false))
 
   } else {
     node.selectAll("g.genome-size").remove()
@@ -401,68 +401,48 @@ function resetChart() {
 
 function drawSimilarityLegend(svg) {
 
-  legendWidth = 80;
 
-  // Background canvas for quick drawing of 2k lines
-  /*
-  var canvas = d3.select('body').append("canvas")
-      .attr("width", legendWidth)
-      .attr("height", 20)
-      .style("position", "fixed")
-      .style("left", "690px")
-      .style("top", "230px")
+  svg.append("g")
+    .attr("class", "legendSequential")
+    .attr("transform", "translate(270, " + (-(width/2)+170) + ")");
 
-  var ctx = canvas.node().getContext("2d");
-  */
+  var legendSequential = d3.legendColor()
+      .title("Sequence shared with Human")
+      .titleWidth(110)
+      .shapeWidth(20)
+      .cells(10)
+      .labelFormat(d3.format(".0%"))
+      .orient("vertical")
+      .scale(similarityColorScale)
 
-  var xScale  = d3.scaleLinear().domain([0, 100]).range([0, legendWidth]);
-
-  var axis = svg.append("g")
-    .attr("class", "axis")
-    .attr("transform", "translate(170, " + (-(width/2)+190) + ")");
-
-  axis.call(d3.axisBottom(xScale).ticks(5));
-  axis.append("text")
-      .attr("class", "legend-title")
-      .attr("x", 0)
-      .attr("y", -27)
-      .text("Percent Sequence ");
-  axis.append("text")
-      .attr("class", "legend-title")
-      .attr("x", 0)
-      .attr("y", -15)
-      .text("Shared with Human");
-
-  axis.append("image")
-      .attr("xlink:href", "assets/YlGrBuGradient.png")
-      .attr("x", 0)
-      .attr("y", -16)
-      .attr("width", legendWidth)
-      .attr("height", 20);
-
-/*
-  var legendColorScale = d3.scaleSequential()
-                   .domain([0,100])
-                   .interpolator(d3.interpolateYlGnBu)
-
-  var linear = d3.scaleLinear()
-                .domain([0,100])
-                .range([legendColorScale(0),legendColorScale(1)]);
-
-
-
-  // Let's draw 1000 lines on canvas for speed
-  d3.range(0, 100, .001)
-    .forEach(function (d) {
-      ctx.beginPath();
-      ctx.strokeStyle = colorScale(d/100);
-      ctx.moveTo(xScale(d), 0);
-      ctx.lineTo(xScale(d), 20);
-      ctx.stroke();
-    });
-  */
-
+  svg.select(".legendSequential")
+    .call(legendSequential);
 }
+
+function drawGenomeSizeLegend(svg) {
+
+  svg.append("g")
+    .attr("class", "legendSize")
+    .attr("transform", "translate(270, " + (-(width/2)+350) + ")");
+
+  var prec     = d3.precisionPrefix(1e5, 1.3e6);
+  var formatMB = d3.formatPrefix("." + prec, 1.3e6);
+
+  var legendSize = d3.legendSize()
+    .title("Genome size (in MB)")
+    .titleWidth(80)
+    .scale(genomeSizeScale)
+    .shape('circle')
+    .shapePadding(5)
+    .cells(5)
+    .labelFormat(d3.format(",.0f"))
+    .labelOffset(5)
+    .orient('vertical');
+
+  svg.select(".legendSize")
+     .call(legendSize);
+}
+
 
 // Set the radius of each node by recursively summing and scaling the distance from the root.
 function setRadius(d, y0, k) {
@@ -505,6 +485,27 @@ function mouseOverRatio(active) {
       tooltip .html(d.data.name.replace(/_/g, " ")
                     + " shares "
                     + pct + "%  with Human")
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 44) + "px");
+
+    } else {
+      tooltip.transition()
+          .duration(500)
+          .style("opacity", 0);
+
+    }
+  }
+}
+function mouseOverGenomeSize(active) {
+  return function(d) {
+    if (active) {
+      let genomeSize = speciesInfo[d.data.name].genomeSize;
+      tooltip.transition()
+          .duration(200)
+          .style("opacity", .9);
+      tooltip .html(d.data.name.replace(/_/g, " ")
+                    + " genome size: "
+                    + genomeSize + " MB")
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 44) + "px");
 

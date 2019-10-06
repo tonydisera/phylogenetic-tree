@@ -14,10 +14,12 @@ div.tooltip {
     position: absolute;
     text-align: center;
     width: 100px;
-    height: 40px;
+    min-height: 30px;
+    max-height: 60px;
     padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
+    font: 13px sans-serif;
+    color: white;
+    background: #303030;
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
@@ -79,7 +81,7 @@ g.nodes text.emphasize-node {
 }
 
 g.nodes g.genome-size circle {
-  fill: #9a9a9a69;
+  fill: rgb(57, 81, 149);
   stroke: #717171;
 }
 
@@ -93,7 +95,7 @@ g.nodes text.deemphasize-node {
 g.nodes text.example-node {
     font-size: 15px;
     font-weight: 600;
-    fill:  #0e9991;
+    fill:  #387cc0;
 }
 
 g.nodes text.emphasize-node.label--active {
@@ -119,6 +121,7 @@ text.legend-title  {
 h2 {
   margin-bottom: 0px;
   margin-top: 0px;
+  color: #828181;
 }
 
 
@@ -139,8 +142,9 @@ h2 {
 .chart-hint.legend {
 }
 
-.chart-hint.credits {
-
+.chart-hint.credits a {
+  font-weight: 500;
+  color: #387cc0;
 }
 
 
@@ -170,12 +174,23 @@ h2 {
 .show-me {
   font-size: 12px !important;
   font-weight: bold !important;
-  color: #0e9991 !important;
+  color: #387cc01 !important;
   line-height: 14px !important;
   padding: 0 !important;
   margin: 0 !important;
   vertical-align: top !important;
-  border: thin solid #0e9991 !important;
+  border: thin solid #387cc0 !important;
   padding-left: 5px !important;
   padding-right: 5px !important;
+}
+
+.legendTitle {
+  font-size: 13px;
+}
+.legendSize circle.swatch {
+  fill: rgb(57, 81, 149);
+  stroke: #717171;
+}
+.legendCells .cell .label {
+  font-size: 11px;
 }
