@@ -30,7 +30,7 @@
     </div>
 
     <div style="display:flex;flex-flow:row;">
-      <div style="width:250px;margin-right:20px;margin-top:10px">
+      <div style="width:230px;margin-right:20px;margin-top:10px">
 
         <div class="accordion" id="accordionExample">
           <div class="card">
@@ -57,7 +57,7 @@
                      sequence from different species. The longer the branch, the more
                      divergence that has occurred.
                      <br>
-                     Notice that the Lamprey  diverges significantly from other vertebrates.  <button onclick="highlightExample('Lamprey')" class="btn btn btn-link btn-sm show-me" >Show me</button>
+                     Notice that the Lamprey  diverges significantly from other vertebrates.  <button onclick="highlightExample('Lamprey')" class="btn btn btn-link btn-sm show-me" >Highlight</button>
                 </div>
 
               </div>
@@ -81,12 +81,13 @@
                 <div class="chart-hint legend" >
                      The bar between the branch and the species name indicates the percent
                      of sequence shared between the species and Human.
+                     <br><br>
                      <div class="emphasize">
                      Hover over the colored bar under a species to see the percentage shared
                      with the Human genome.
                     </div>
                      <br>For example, Elephant is
-                     more genetically similar to Human than Mouse.  <button onclick="highlightExample('Elephant,Mouse')" class="btn btn btn-link btn-sm show-me">Show me</button>
+                     more genetically similar to Human than Mouse.  <button onclick="highlightExample('Elephant,Mouse')" class="btn btn btn-link btn-sm show-me">Highlight</button>
                 </div>
 
               </div>
@@ -113,6 +114,7 @@
                 <div class="chart-hint legend" >
                   Genome sizes can vary greatly.  Toggle to show the genome size for each species, represented by the
                   size of the circle.
+                  <br><br>
                   <div class="emphasize">
                      Hover over the circle under the species to see the genome size.
                   </div>
@@ -120,9 +122,9 @@
                   <br>Notice the genome sizes of fish, which are considerably smaller than other
                   vertebrates.
 
-                  <button class="btn btn btn-link btn-sm show-me" onclick="highlightExample('Atlantic_cod,Stickleback,Southern_platyfish,Medaka,Tetraodon,Fugu,Yellowbelly_pufferfish,Nile_tilapia,Princess_of_Burundi,Burton\'s_mouthbreeder,Zebra_mbuna,Pundamilia_nyererei', false)">Show me</button>
+                  <button class="btn btn btn-link btn-sm show-me" onclick="highlightExample('Atlantic_cod,Stickleback,Southern_platyfish,Medaka,Tetraodon,Fugu,Yellowbelly_pufferfish,Nile_tilapia,Princess_of_Burundi,Burton\'s_mouthbreeder,Zebra_mbuna,Pundamilia_nyererei', false)">Highlight</button>
                   <br><br>Notice the large genome size of the Aardvark and Cape golden mole.
-                  <button class="btn btn btn-link btn-outline btn-sm show-me" onclick="highlightExample('Aardvark,Cape_golden_mole', false)">Show me</button>
+                  <button class="btn btn btn-link btn-outline btn-sm show-me" onclick="highlightExample('Aardvark,Cape_golden_mole', false)">Highlight</button>
                 </div>
 
 
@@ -150,6 +152,11 @@
 
                   <div style="padding-top: 4px">
                     Legends: <br><a href="https://d3-legend.susielu.com/" target="_new">Susie Lu d3-legend</a>
+                  </div>
+
+                  <div style="padding-top: 4px">
+                    This visualization:<br>
+                    <a href="https://www.ischool.berkeley.edu/people/tony-di-sera">Tony Di Sera, UC Berkeley MIDS 209.4</a>
                   </div>
                 </div>
 

@@ -16,13 +16,15 @@ percent of sequene the species shares with the Human
 genome.
 */
 let tooltip = null;
-let width = 730
+let width = 740
 let outerRadius = 300
 let innerRadius = 180
 let marginTop = 100
-let marginLeft = -70
+let marginLeft = -60
 let link = null
 let linkExtension = null
+let similarityGroup = null;
+let genomeSizeGroup = null;
 let node = null
 let phyloFileName      = "data/hg19.100way.commonNames.nh";
 let similarityFileName = "data/species_multialign_info.csv";
@@ -31,14 +33,15 @@ let speciesInfo = {}
 let scientificNameToSpecies = {}
 let barHeight = 18
 let barWidth = 5
-let barPadding = 4
+let barPadding = 3
 let barHeightIsRatio = false;
+var genomeSizeMaxRadius = 7;
+var genomeSizeMinRadius = 2;
+var circlePadding = 4;
 
 
 var similarityColorScale = null;
 var genomeSizeScale = null;
-var genomeSizeMaxRadius = 7;
-var genomeSizeMinRadius = 2;
 
 let treeObject = null;
 let showSimilarity = false;
@@ -53,7 +56,7 @@ $(document).ready(function() {
     updateBranch(false)
   });
   branchToggleButton.addButton('Show', false, 'click', function(){
-     $('.collapse.show').removeClass("show");
+    $('.collapse.show').removeClass("show");
     $('#collapseOne').addClass("show")
     updateBranch(true)
   });
@@ -64,13 +67,13 @@ $(document).ready(function() {
   });
   similarityToggleButton.addButton('Hide', true, 'click', function(){
     showSimilarity = false;
-    drawTree(treeObject, getChartOptions())
+    updateSimilarity(getChartOptions())
   });
   similarityToggleButton.addButton('Show', false, 'click', function(){
     showSimilarity = true;
     $('.collapse.show').removeClass("show");
     $('#collapseTwo').addClass("show")
-    drawTree(treeObject, getChartOptions())
+    updateSimilarity(getChartOptions())
   });
   similarityToggleButton.append('#similarity-toggle-button');
 
@@ -80,13 +83,13 @@ $(document).ready(function() {
   });
   sizeToggleButton.addButton('Hide', true, 'click', function(){
     showGenomeSize = false;
-    drawTree(treeObject, getChartOptions())
+    updateGenomeSize(getChartOptions())
   });
   sizeToggleButton.addButton('Show', false, 'click', function(){
     showGenomeSize = true;
     $('.collapse.show').removeClass("show");
     $('#collapseThree').addClass("show")
-    drawTree(treeObject, getChartOptions())
+    updateGenomeSize(getChartOptions())
   });
   sizeToggleButton.append('#genome-size-toggle-button');
 
@@ -102,18 +105,22 @@ $(document).ready(function() {
 })
 
 function onShowSimilarity() {
-  $('#similarity-toggle-button .strip-button-1').addClass("active-strip-button");
-  $('#similarity-toggle-button .strip-button-0').removeClass("active-strip-button");
+  setTimeout(function() {
+    $('#similarity-toggle-button .strip-button-0').removeClass("active-strip-button");
+    $('#similarity-toggle-button .strip-button-1').addClass("active-strip-button");
+  },1000)
   showSimilarity = true;
-  drawTree(treeObject, getChartOptions())
+  updateSimilarity(getChartOptions());
 
 }
 
 function onShowGenomeSize() {
-  $('#genome-size-toggle-button .strip-button-1').addClass("active-strip-button");
-  $('#genome-size-toggle-button .strip-button-0').removeClass("active-strip-button");
+  setTimeout(function() {
+    $('#genome-size-toggle-button .strip-button-0').removeClass("active-strip-button");
+    $('#genome-size-toggle-button .strip-button-1').addClass("active-strip-button");
+  },1000)
   showGenomeSize = true;
-  drawTree(treeObject, getChartOptions())
+  updateGenomeSize(getChartOptions())
 
 }
 
@@ -205,27 +212,17 @@ function drawTree(treeObject, options) {
              .attr("viewBox", [-outerRadius, -outerRadius, width, width]);
 
 
-  if (options.showGenomeSize) {
-    let genomeSizes = d3.entries(speciesInfo).map(function(d){return d.value})
-    genomeSizeScale = d3.scaleQuantize()
-                         .domain(d3.extent(genomeSizes, function(d,i) {
-                            return +d.genomeSize;
-                         }))
-                         .range(d3.ticks(genomeSizeMinRadius,genomeSizeMaxRadius, 5))
-  }
+  let genomeSizes = d3.entries(speciesInfo).map(function(d){return d.value})
+  genomeSizeScale = d3.scaleQuantize()
+                       .domain(d3.extent(genomeSizes, function(d,i) {
+                          return +d.genomeSize;
+                       }))
+                       .range(d3.ticks(genomeSizeMinRadius,genomeSizeMaxRadius, 5))
 
-  if (options.showSimilarity) {
-    similarityColorScale = d3.scaleQuantize()
-                             .domain([0,1])
-                             .range(d3.quantize(d3.interpolateYlGnBu, 5))
-  }
+  similarityColorScale = d3.scaleQuantize()
+                           .domain([0,1])
+                           .range(d3.quantize(d3.interpolateYlGnBu, 5))
 
-  if (options.showSimilarity) {
-    drawSimilarityLegend(svg);
-  }
-  if (options.showGenomeSize) {
-    drawGenomeSizeLegend(svg);
-  }
 
 
   let group = svg.append("g")
@@ -251,27 +248,59 @@ function drawTree(treeObject, options) {
   node = group.append("g")
       .attr("class", "nodes")
 
+  similarityGroup = node.selectAll("g.similarity")
+      .data(root.leaves())
+      .join("g")
+      .attr("class", "similarity")
+      .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
 
-  if (options.showSimilarity) {
-    let similarity = node.selectAll("g.similarity")
+  let shiftGenomeSize = getShiftForGenomeSize(options);
+  genomeSizeGroup = node.selectAll("g.genome-size")
         .data(root.leaves())
         .join("g")
-        .attr("class", "similarity")
-        .attr("transform", d => `rotate(${d.x - 90}) translate(${innerRadius + 4},0)${d.x < 180 ? "" : " rotate(180)"}`)
+        .attr("class", "genome-size")
+        .attr("transform", d => `rotate(${d.x - 90}) translate(${shiftGenomeSize},0)${d.x < 180 ? "" : " rotate(180)"}`)
 
-    similarity.append("rect")
+
+  let shiftText = getShiftText(options)
+  node.selectAll("text")
+      .data(root.leaves())
+      .join("text")
+      .attr("class", function(d,i) {
+        if (d.data.name == 'Human') {
+          return 'species-name emphasize-node';
+        } else {
+          return "species-name";
+        }
+      })
+      .attr("dy", ".31em")
+      .attr("transform", d => `rotate(${d.x - 90}) translate(${shiftText},0)${d.x < 180 ? "" : " rotate(180)"}`)
+      .attr("text-anchor", d => d.x < 180 ? "start" : "end")
+      .text(d => {
+        return d.data.name.replace(/_/g, " ")
+      })
+      .on("mouseover", mouseovered(true))
+      .on("mouseout", mouseovered(false));
+
+  updateBranch(false)
+  updateSimilarity(options)
+
+}
+
+function updateBranch(checked) {
+  const t = d3.transition().duration(750);
+  linkExtension.transition(t).attr("d", checked ? linkExtensionVariable : linkExtensionConstant);
+  link.transition(t).attr("d", checked ? linkVariable : linkConstant);
+}
+
+function updateSimilarity(options) {
+  if (options.showSimilarity) {
+    drawSimilarityLegend();
+
+    similarityGroup.append("rect")
               .attr("width", barWidth)
               .attr("height", d => {
-                if (barHeightIsRatio) {
-                  let ratio = speciesInfo[d.data.name].ratioToHuman;
-                  if (ratio) {
-                    return Math.max(barWidth, ratio * (barHeight-barPadding));
-                  } else {
-                    return 0;
-                  }
-                } else {
-                  return barHeight - barPadding;
-                }
+                return 0;
               })
               .attr("x", -barPadding)
               .attr("y", d => {
@@ -297,26 +326,45 @@ function drawTree(treeObject, options) {
               .on("mouseover", mouseOverRatio(true))
               .on("mouseout", mouseOverRatio(false))
 
+      similarityGroup.selectAll("rect").transition()
+                .duration(700)
+                .attr("height", d=> {
+                  if (barHeightIsRatio) {
+                    let ratio = speciesInfo[d.data.name].ratioToHuman;
+                    if (ratio) {
+                      return Math.max(barWidth, ratio * (barHeight-barPadding));
+                    } else {
+                      return 0;
+                    }
+                  } else {
+                    return barHeight - barPadding;
+                  }
+                })
+
+
+
   } else {
-    node.selectAll("g.similarity").remove()
+    similarityGroup.selectAll("rect").remove()
+    d3.select(".phylo-tree svg").selectAll(".legendSequential").remove()
+
   }
 
-  let shiftOut = null;
-  if (options.showSimilarity) {
-    shiftOut = innerRadius + barHeight + barPadding  + genomeSizeMaxRadius/2 + 4;
-  } else {
-    shiftOut = innerRadius + genomeSizeMaxRadius/2 +  4;
-  }
+  let shiftCircleOut = getShiftForGenomeSize(options)
+  genomeSizeGroup.attr("transform", d => `rotate(${d.x - 90}) translate(${shiftCircleOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
+
+  let shiftText = getShiftText(options)
+  node.selectAll("text.species-name").attr("transform", d => `rotate(${d.x - 90}) translate(${shiftText},0)${d.x < 180 ? "" : " rotate(180)"}`)
+}
+
+
+function updateGenomeSize(options) {
   if (options.showGenomeSize) {
-    let genomeSize = node.selectAll("g.genome-size")
-        .data(root.leaves())
-        .join("g")
-        .attr("class", "genome-size")
-        .attr("transform", d => `rotate(${d.x - 90}) translate(${shiftOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
 
-    genomeSize.append("circle")
+    drawGenomeSizeLegend();
+
+    genomeSizeGroup.append("circle")
               .attr("r", d => {
-                return genomeSizeScale(speciesInfo[d.data.name].genomeSize)
+                return 0;
               })
               .attr("x", -barPadding)
               .attr("y", d => {
@@ -324,46 +372,24 @@ function drawTree(treeObject, options) {
               })
               .on("mouseover", mouseOverGenomeSize(true))
               .on("mouseout", mouseOverGenomeSize(false))
+    genomeSizeGroup.selectAll("circle")
+              .transition()
+              .duration(700)
+              .attr("r", d=> {
+                return genomeSizeScale(speciesInfo[d.data.name].genomeSize);
+              })
 
   } else {
-    node.selectAll("g.genome-size").remove()
+    node.selectAll("g.genome-size").selectAll("circle").remove()
+    d3.select(".phylo-tree svg").selectAll(".legendSize").remove()
+
   }
+  let shiftCircleOut = getShiftForGenomeSize(options)
+  genomeSizeGroup.attr("transform", d => `rotate(${d.x - 90}) translate(${shiftCircleOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
 
+  let shiftTextOut = getShiftText(options)
+  node.selectAll("text.species-name").attr("transform", d => `rotate(${d.x - 90}) translate(${shiftTextOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
 
-  shiftOut = null;
-  if (options.showSimilarity) {
-    shiftOut = innerRadius + barHeight + barPadding  + 4;
-  } else {
-    shiftOut = innerRadius + 4;
-  }
-  if (options.showGenomeSize) {
-    shiftOut +=  (genomeSizeMaxRadius) + barPadding;
-  }
-  node.selectAll("text")
-      .data(root.leaves())
-      .join("text")
-      .attr("class", function(d,i) {
-        if (d.data.name == 'Human') {
-          return 'emphasize-node';
-        }
-      })
-      .attr("dy", ".31em")
-      .attr("transform", d => `rotate(${d.x - 90}) translate(${shiftOut},0)${d.x < 180 ? "" : " rotate(180)"}`)
-      .attr("text-anchor", d => d.x < 180 ? "start" : "end")
-      .text(d => {
-        return d.data.name.replace(/_/g, " ")
-      })
-      .on("mouseover", mouseovered(true))
-      .on("mouseout", mouseovered(false));
-
-  updateBranch(false)
-
-}
-
-function updateBranch(checked) {
-  const t = d3.transition().duration(750);
-  linkExtension.transition(t).attr("d", checked ? linkExtensionVariable : linkExtensionConstant);
-  link.transition(t).attr("d", checked ? linkVariable : linkConstant);
 }
 
 
@@ -374,11 +400,11 @@ function highlightExample(speciesNamesStr, emphasizeHuman=true) {
      .attr("class", function(d,i) {
 
         if (speciesNames.indexOf(d.data.name) >= 0) {
-          return 'example-node';
+          return 'species-name example-node';
         } else if (emphasizeHuman && d.data.name == 'Human') {
-          return 'emphasize-node';
+          return 'species-name emphasize-node';
         } else {
-          return 'deemphasize-node';
+          return 'species-name deemphasize-node';
         }
      })
 
@@ -391,20 +417,20 @@ function resetChart() {
      .attr("class", function(d,i) {
 
         if (d.data.name == 'Human') {
-          return 'emphasize-node';
+          return 'species-name emphasize-node';
         } else {
-          return '';
+          return 'species-name';
         }
      })
 
 }
 
-function drawSimilarityLegend(svg) {
-
+function drawSimilarityLegend() {
+  let svg = d3.select(".phylo-tree svg");
 
   svg.append("g")
     .attr("class", "legendSequential")
-    .attr("transform", "translate(270, " + (-(width/2)+170) + ")");
+    .attr("transform", "translate(280, " + (-(width/2)+170) + ")");
 
   var legendSequential = d3.legendColor()
       .title("Sequence shared with Human")
@@ -419,11 +445,13 @@ function drawSimilarityLegend(svg) {
     .call(legendSequential);
 }
 
-function drawGenomeSizeLegend(svg) {
+function drawGenomeSizeLegend() {
+
+  let svg = d3.select(".phylo-tree svg");
 
   svg.append("g")
     .attr("class", "legendSize")
-    .attr("transform", "translate(270, " + (-(width/2)+350) + ")");
+    .attr("transform", "translate(280, " + (-(width/2)+330) + ")");
 
   var prec     = d3.precisionPrefix(1e5, 1.3e6);
   var formatMB = d3.formatPrefix("." + prec, 1.3e6);
@@ -474,6 +502,32 @@ function linkStep(startAngle, startRadius, endAngle, endRadius) {
       + (endAngle === startAngle ? "" : "A" + startRadius + "," + startRadius + " 0 0 " + (endAngle > startAngle ? 1 : 0) + " " + startRadius * c1 + "," + startRadius * s1)
       + "L" + endRadius * c1 + "," + endRadius * s1;
 }
+
+function getShiftText(options) {
+  var shiftOut = null;
+  if (options.showSimilarity) {
+    shiftOut = innerRadius + barHeight + barPadding  + 4;
+  } else {
+    shiftOut = innerRadius + 4;
+  }
+  if (options.showGenomeSize) {
+    shiftOut +=  (genomeSizeMaxRadius) + barPadding + circlePadding;
+  }
+  return shiftOut;
+}
+
+function getShiftForGenomeSize(options) {
+
+  let shiftOut = null;
+  if (options.showSimilarity) {
+    shiftOut = innerRadius + barHeight + barPadding  + genomeSizeMaxRadius/2 + 4;
+  } else {
+    shiftOut = innerRadius + genomeSizeMaxRadius/2 +  4;
+  }
+  return shiftOut;
+
+}
+
 function mouseOverRatio(active) {
   return function(d) {
     if (active) {

@@ -69,7 +69,7 @@ g.link-extensions {
 }
 
 g.nodes text {
-  color:  #454545;
+  fill:  #535353;
   font-size: 12px;
   cursor: pointer;
 }
@@ -83,6 +83,7 @@ g.nodes text.emphasize-node {
 g.nodes g.genome-size circle {
   fill: rgb(57, 81, 149);
   stroke: #717171;
+  cursor: pointer;
 }
 
 
@@ -121,22 +122,20 @@ text.legend-title  {
 h2 {
   margin-bottom: 0px;
   margin-top: 0px;
-  color: #828181;
+  color: #535353;
 }
 
 
 .chart-hint {
-  font-size: 12px;
-  padding: 5px;
+  font-size: 13px;
   margin-top: 0px;
   color: #454545;
 }
 
 
 .chart-hint .emphasize {
-  font-weight: 500;
-  padding-top: 10px;
-  color: #648ab1;
+  font-weight: 600;
+  color: #387cc0;
 }
 
 .chart-hint.legend {
@@ -167,14 +166,14 @@ h2 {
 
 .card-header h2 button {
     font-size: 14px;
-    color: #7c7c7c;
+    color: #535353;
     padding: 0px;
     font-weight: 500;
 }
 .show-me {
   font-size: 12px !important;
   font-weight: bold !important;
-  color: #387cc01 !important;
+  color: #387cc0 !important;
   line-height: 14px !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -185,12 +184,23 @@ h2 {
 }
 
 .legendTitle {
-  font-size: 13px;
+  font-size: 14px;
+  fill: #535353;
+}
+.legendTitle tspan {
+  font-size: 14px;
+  fill: #535353;
 }
 .legendSize circle.swatch {
   fill: rgb(57, 81, 149);
   stroke: #717171;
 }
 .legendCells .cell .label {
-  font-size: 11px;
+  font-size: 12px;
+  fill: #535353;
+}
+.accordion>.card .card-header {
+  padding-left: 10px;
+  padding-right: 10px;
+  fill: #535353;
 }
