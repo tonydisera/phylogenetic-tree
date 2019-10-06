@@ -288,12 +288,14 @@ function drawTree(treeObject, options) {
 }
 
 function updateBranch(checked) {
+  resetChart();
   const t = d3.transition().duration(750);
   linkExtension.transition(t).attr("d", checked ? linkExtensionVariable : linkExtensionConstant);
   link.transition(t).attr("d", checked ? linkVariable : linkConstant);
 }
 
 function updateSimilarity(options) {
+  resetChart();
   if (options.showSimilarity) {
     drawSimilarityLegend();
 
@@ -358,6 +360,8 @@ function updateSimilarity(options) {
 
 
 function updateGenomeSize(options) {
+  resetChart();
+
   if (options.showGenomeSize) {
 
     drawGenomeSizeLegend();
