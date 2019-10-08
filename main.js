@@ -20,7 +20,7 @@ let width = 740
 let outerRadius = 300
 let innerRadius = 180
 let marginTop = 100
-let marginLeft = -60
+let marginLeft = -55
 let link = null
 let linkExtension = null
 let similarityGroup = null;
@@ -434,7 +434,7 @@ function drawSimilarityLegend() {
 
   svg.append("g")
     .attr("class", "legendSequential")
-    .attr("transform", "translate(280, " + (-(width/2)+170) + ")");
+    .attr("transform", "translate(260, " + (-(width/2)+170) + ")");
 
   var legendSequential = d3.legendColor()
       .title("Sequence shared with Human")
@@ -455,7 +455,7 @@ function drawGenomeSizeLegend() {
 
   svg.append("g")
     .attr("class", "legendSize")
-    .attr("transform", "translate(280, " + (-(width/2)+330) + ")");
+    .attr("transform", "translate(260, " + (-(width/2)+530) + ")");
 
   var prec     = d3.precisionPrefix(1e5, 1.3e6);
   var formatMB = d3.formatPrefix("." + prec, 1.3e6);

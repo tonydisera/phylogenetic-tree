@@ -169,6 +169,10 @@ h2 {
     color: #535353;
     padding: 0px;
     font-weight: 500;
+    text-align: left;
+}
+.card-body {
+  padding: 10px !important;
 }
 .show-me {
   font-size: 12px !important;
